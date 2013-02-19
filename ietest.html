@@ -1,0 +1,156 @@
+
+<!DOCTYPE html >
+<html>
+<head>
+<title>Gesture Event Firing test</title>
+<style type="text/css">
+.display
+{
+  /* Block areas from being selected */
+  -ms-user-select: none;
+ }
+ body
+ {
+   /* Block area from manipulation actions (zoom, pan) */
+   -ms-touch-action: none;
+ }
+
+</style>
+<script type="text/javascript">
+    var messageId = 0;
+    var redGesture, blueGesture;
+    var redElement, blueElement;
+
+    function printMessage(str)
+       {
+    var element = document.getElementById("output");
+    messageId++;
+    element.value += formatMessage(messageId + ":", 4) + str;
+    element.scrollTop = element.scrollHeight;
+
+    element = document.getElementById("eventCount");
+    element.innerHTML = messageId;
+}
+
+function formatMessage(str, len)
+{
+    var formattedMessage = null;
+    if (str != null)
+    {
+        var formattedMessage = str.toString();
+        formattedMessage += " ";
+        for (var idx = formattedMessage.length; idx < len; idx++)
+        {
+            formattedMessage += " ";
+        }
+    }
+    return formattedMessage;
+}
+
+function onLoad() {
+
+    //  Create gesture event listeners for each <div> element
+    prepareTarget("Red", redListener);
+    prepareTarget("Blue", blueListener);
+    // Create MSGesture object 1 (red <div>)
+    redGesture = new MSGesture();
+    redElement = document.getElementById("Red");
+    redGesture.target = redElement;
+    // Create MSGesture object 2 (blue <div>)
+    blueGesture = new MSGesture();
+    blueElement = document.getElementById("Blue");
+    blueGesture.target = blueElement;
+    
+}
+
+//  Add gesture events to an element and point at a specific function
+function prepareTarget(targetId, eventListener)
+{
+    var target = document.getElementById(targetId);
+    target.addEventListener("MSGestureStart", eventListener, false);
+    target.addEventListener("MSGestureEnd", eventListener, false);
+    target.addEventListener("MSGestureChange", eventListener, false);
+    target.addEventListener("MSInertiaStart", eventListener, false);
+    target.addEventListener("MSGestureTap", eventListener, false);
+    target.addEventListener("MSGestureHold", eventListener, false);
+    target.addEventListener("MSPointerDown", eventListener, false);
+}
+
+function printEvent(evt)
+{
+    var str =
+        formatMessage(evt.type, 16) + 
+        formatMessage(evt.screenX, 6) +
+        formatMessage(evt.screenY, 6)  +
+        formatMessage(evt.clientX.toFixed(0), 6) +
+        formatMessage(evt.clientY.toFixed(0), 6)  +
+        formatMessage(evt.translationX.toFixed(2), 8) +
+        formatMessage(evt.translationY.toFixed(2), 8)  +
+        formatMessage(evt.scale.toFixed(2), 7)  +
+        formatMessage(evt.rotation.toFixed(2), 7)  +
+        formatMessage(evt.detail, 5) +
+        formatMessage(evt.currentTarget.id, 10) +
+        formatMessage(evt.srcElement.id, 10) +
+        formatMessage(evt.velocityAngular, 10) +
+         
+        "\n";
+    printMessage(str);
+    evt.stopPropagation();
+}
+
+//  Reset the gesture object
+function reset()
+{
+        printMessage("Reset gesture\n");
+        redGesture.reset();
+        blueGesture.reset();
+}
+//  Adds a pointer to the MSGesture object for the red square
+function redListener(evt)
+{
+    if (evt.type == "MSPointerDown")
+    {
+        redGesture.addPointer(evt.pointerId);
+        return;
+    }
+    printEvent(evt);
+}
+//  Adds a pointer to the MSGesture object for the blue square
+function blueListener(evt)
+{
+    if (evt.type == "MSPointerDown")  // add pointer on MSPointerDown event
+    {
+        blueGesture.addPointer(evt.pointerId);
+        return;
+    }
+    printEvent(evt);  //  Otherwise pass on event
+}
+
+function clearMessages(evt)
+// Clear the list of gesture messages
+{
+    var results = document.getElementById("output");
+    results.innerHTML = "";
+    messageId = 0;
+    results = document.getElementById("eventCount");
+    results.innerHTML = messageId;
+}
+</script>
+</head>
+
+<body id = "page" onload="onLoad()">
+    <!-- Elements to try out gestures -->
+    <div class= "display" id="Red" style="position: relative; top: 0px; left: 0px; width: 300px; height: 250px; background-color: red"></div>
+    <div class= "display" id="Blue" style="position: absolute; top: 10px; left: 350px; width: 300px; height: 250px; background-color: blue"></div>
+    <div class= "display" id="control" style="position: absolute; top: 50px; left: 750px; width: 300px; height: 250px;">
+        <input type="button" value="Clear Messages" onclick=clearMessages()></input>
+        <br />
+        <p>Gesture Event Count: <span id="eventCount"></span></p>
+    </div>
+
+    <strong><pre><font size="2" face="Courier">
+        Type            ScrX  ScrY  CliX  CliY  TrnX    TrnY    Scal   Rotn   Det  Current  Source 
+    <textarea id=output rows="18" cols="140" wrap="off" readonly="readonly" ></textarea>
+    </font></pre></strong>
+</body>
+</html>

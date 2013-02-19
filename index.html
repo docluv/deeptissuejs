@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>DeepTissue.js - A Touch Abstraction Library</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+        <meta content="A JavaScript Library to Abstract MSPointer and WebKit Touch APIs" name="description">
+        <meta content="Chris Love" name="author">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+        <link href="favicon.ico" rel="shortcut icon">
+        <link href="img/h/apple-touch-icon.png" rel="apple-touch-icon-precomposed" sizes="114x114">
+        <link href="img/m/apple-touch-icon.png" rel="apple-touch-icon-precomposed" sizes="72x72">
+        <link href="img/l/apple-touch-icon-precomposed.png" rel="apple-touch-icon-precomposed">
+        <link href="img/l/apple-touch-icon.png" rel="shortcut icon">
+
+        <meta name="application-name" content="Deeptissue.js" />
+        <meta name="msapplication-TileColor" content="#0094ff" />
+        <meta name="msapplication-TileImage" content="msTouchIcon.png" />
+
+        <meta content="yes" name="apple-mobile-web-app-capable">
+        <meta content="black" name="apple-mobile-web-app-status-bar-style">
+
+        <meta name="google-site-verification" content="HfjA5xFE0XGLpBTctB2Vd6IglorXsjJpIImhE1H3yLU" />
+
+        <script>(function(a,b,c){if(c in b&&b[c]){var d,e=a.location,f=/^(a|html)$/i;a.addEventListener("click",function(a){d=a.target;while(!f.test(d.nodeName))d=d.parentNode;"href"in d&&(d.href.indexOf("http")||~d.href.indexOf(e.host))&&(a.preventDefault(),e.href=d.href)},!1)}})(document,window.navigator,"standalone")</script>
+        <link href="img/l/splash.png" rel="apple-touch-startup-image">
+        <meta content="on" http-equiv="cleartype">
+
+        <link href="css/site.css?v=1" rel="stylesheet">
+
+
+    </head>
+    <body>
+        <header>
+            <a href="/" title="Deeptissue.js a Touch Library" class="no-decor">
+                <img src="img\m\apple-touch-icon.png" alt="deeptissue.js" class="site-logo" /><h1>Deeptissue.js</h1></a>
+            <h2>A Gesture Abstraction Library for both MSPointer and WebKit Touch APIs</h2>
+            <nav>
+                <a href="realtaptest.html">TAP</a>
+                <a href="realmovetest.html">MOVE</a>
+                <a href="realrotatetests.html">ROTATE</a>
+                <a href="realswipetest.html">SWIPE</a>
+                <a href="realscaletest.html">SCALE</a>
+            </nav>
+        </header>
+        <section class="main-content">
+            <article>
+                <section class="content">
+                    <p>Deeptissue.js is a helper library to abstract away the differences between the MSPointer, WebKit (Apple) Touch and Mouse event APIs. There are many JavaScript libraries publicly available that support the WebKit API and a few that help with the MSPointer API, but I found nothing that bridged the gap. So I decided I would create a library to do just that.</p>
+                    <p><a href="https://github.com/docluv/deeptissuejs" class="clone">Clone the Source Code On GitHub</a></p>
+                    <p><a href="github-windows://openRepo/https://github.com/docluv/deeptissuejs" class="button minibutton " icon_class="mini-icon-windows"><span class="mini-icon mini-icon-windows"></span>Clone in Windows</a></p>
+                    <p>The library was written with no 3rd party library, like jQuery, dependencies. The library does work just fine with jQuery. In fact I will have an additional jQuery file that provides extension methods structured consistently with the way jQuery abstracts standard browser events. </p>
+
+                    <p>In the initial release the following actions are supported:</p>
+                    <ul>
+                        <li>Tap</li>
+                        <li>Double Tap</li>
+                        <li>Tap Hold</li>
+                        <li>Move</li>
+                        <li>Horizontal Move</li>
+                        <li>Vertical Move</li>
+                        <li>Swipe Left</li>
+                        <li>Swipe Right</li>
+                        <li>Swipe Up</li>
+                        <li>Swipe Down</li>
+                    </ul>
+                    <p>For Internet Explorer 10 and Mobile Safari these additional gestures are supported:</p>
+                    <ul>
+                        <li>Rotate</li>
+                        <li>Scale</li>
+                    </ul>
+                    <p>In the near future I may add Android gesture support. I am sort of holding out to see if they will adopt the MSPointer model soon. If so then boom! it should work. If not then it is a lot of calculations and testing required.</p>
+                    <p>I also have a list of additional gestures I hope to support in the near future:</p>
+                    <ul>
+                        <li>Multi-Finger Taps</li>
+                        <li>Multi-Finger Swipes</li>
+                        <li>Swipe To Select</li>
+                    </ul>
+                    <h3>Some things to note:</h3>
+
+                    <p>I have not been able to get Rotate to work on Windows Phone. I have confirmed this is a bug in the browser and we will just have to wait for them to fix it now. It does work in Windows 8.</p>
+
+                    <h3>Unit Testing</h3>
+
+                    <p>Before you ding me for my Unit testing hear me out. I have a very small set of unit tests but will add more over time. Here is the thing, this is a UX library and its hard to AssertIsCool, AssertIsFluid, AssertIsAmazing. Sure there are some things I can test and I will. What is hard though is trying to write an entire mock and stub infrastructure to mimic both MSPointer and WebKit Touch APIs. You also need a full fledge CSSMatrix stub, etc. There is a lot of back plumbing to truly have a solid set of unit tests covering the entire set of functionality. </p>
+
+                    <p>You also need to consider this has started as a learning curve project. There are lots of things I had to 'experience' across devices if you will. In my opinion there is not the deep documentation available for any of the APIs that would help with knowing what can and cannot be done, what to expect, etc. There is a lot of setting breakpoints, stepping through, watches, console.write's etc involved. </p>
+
+                    <p>Instead I chose to create pages I could test different scenarios in real-life. I mean the real tests after all involve actually actions and seeing what happens. </p>
+
+                    <p>You can visit these pages by selecting them in the header or footer navigation. Like Unit tests I will most likely add more of these pages over time. Each page will generally have one or more target test items with a log element to echo relevant values.</p>
+
+                    <h3>Documentation</h3>
+
+                    <p>You can always reference the test pages. I have also included a set of documentation files that will hopefully help you as well.</p>
+
+
+                    <h3>Conclusion</h3>
+
+                    <p>Please feel free to use this library. I am integrating it to my web sites and will list the as they come online, so I am dogfooding this library. I consider it early Alpha if you will because I really want to do more testing. If you have any comments or questions drop me a line, Twitter is probably the best way, <a href="http://twitter.com/chrislove">@ChrisLove</a>. My blog is <a href="http://Professionalaspnet.com">ProfessionalAspNet.com</a>. I am new to this GitHub thing so I may or may not know proper GitHub etiquette, so please forgive my missteps there.</p>
+
+                </section>
+                <footer>
+                    <nav>
+                        <a href="realtaptest.html">TAP</a>
+                        <a href="realmovetest.html">MOVE</a>
+                        <a href="realrotatetests.html">ROTATE</a>
+                        <a href="realswipetest.html">SWIPE</a>
+                        <a href="realscaletest.html">SCALE</a>
+                    </nav>
+                </footer>
+            </article>
+        </section>
+        <div class="ribbon">
+            <a href="https://github.com/docluv/deeptissuejs" rel="me" title="Fork Me On GitHub">Fork me on GitHub</a>
+        </div>
+
+        <script type="text/javascript">
+
+
+
+
+            
+            
+            
+            
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-83556-6']);
+            _gaq.push(['_trackPageview']);
+            
+            (function() {
+              var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+              ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+              var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+            
+        </script>
+    </body>
+</html>

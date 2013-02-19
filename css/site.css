@@ -1,0 +1,141 @@
+html, body {
+    cursor: default;
+    height: 100%;
+    -ms-scroll-translation: vertical-to-horizontal;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    -ms-touch-action: none;
+}
+
+html {
+    -webkit-text-size-adjust: none; /* Prevent font scaling in landscape */
+}
+
+body {
+    -ms-content-zooming: none;
+    font-family: 'Segoe UI', 'Segoe WP', sans-serif;
+    font-size: 11pt;
+    letter-spacing: 0.02em;
+    margin: 0px 20px 20px 20px;
+    padding: 0 0 25px 0;
+    background-color: #2e2d2d;
+    color: #f5efef;
+    overflow-x: hidden;
+}
+
+nav
+{
+    width: 600px;
+margin: 20px auto;    
+}
+
+nav > a {
+    margin: 5px 15px 20px 15px;
+    padding: 5px 10px;
+    text-decoration: none;
+    text-align: center;
+    background-color: #0094ff;
+    color: #fff;
+    font-size: 1.25em;
+    font-weight: bold;
+}
+
+.ribbon {
+    background-color: #f5efef;
+    overflow: hidden;
+    /* top left corner */
+    position: absolute;
+    right: -3em;
+    top: 2.5em;
+    /* 45 deg cw rotation */
+    -moz-transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    /* shadow */
+    -moz-box-shadow: 0 0 1em #888;
+    -webkit-box-shadow: 0 0 1em #888;
+    box-shadow: 0 0 1em #888;
+}
+
+.ribbon a {
+    border: 1px solid #faa;
+    color: #0094ff;
+    display: block;
+    font: bold 81.25% 'Helvetiva Neue', Helvetica, Arial, sans-serif;
+    margin: 0.05em 0 0.075em 0;
+    padding: 0.5em 3.5em;
+    text-align: center;
+    text-decoration: none;
+    /* shadow */
+    text-shadow: 0 0 0.5em #2683c7;
+}
+
+.main-content {
+    margin: 20px 10px 20px 40px;
+}
+
+.touch-area {
+    background-color: #0094ff;
+    color: #2e2d2d;
+    width: 200px;
+    height: 200px;
+    display: block;
+    margin: 24px auto;
+    float: left;
+    overflow: hidden;
+    -ms-touch-action: none;
+    text-align: center;
+    margin: 15px;
+    border: solid 1px #f5efef;
+    line-height: 200px;
+    color: #f5efef;
+    font-size: 1.5em;
+        
+}
+
+.touch-log {
+    background-color: #f5efef;
+    color: #2e2d2d;
+    width: 300px;
+    height: 100px;
+    display: block;
+    margin: 24px;
+    clear: both;
+}
+
+a.no-decor {
+    text-decoration: none;
+    color: #fff;
+}
+
+a.clone {
+    font-size: 1.2em;
+    color: #fff;
+    font-weight: bold;
+    padding: 5px 10px;
+    background-color: #0094ff;
+}
+
+.site-logo
+{
+    float: left;
+    border: none;
+}
+
+a.active
+{
+    border-bottom: solid 3px #fff;
+}
+
+.center-item
+{
+    float: none;
+    margin: 10px auto;
+}
+
+
+p{
+    font-family: Calibri Verdana;
+}
