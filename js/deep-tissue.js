@@ -262,17 +262,37 @@
 
         gestureChange: function (e) {
 
-            //var tl = document.querySelector(".touch-log");
+                var el = e.target,
+                    settings = this.settings;
 
-            //tl.innerText = "gesture Change \r\n" + tl.innerText;
-
-                var target = e.target;
                     e.preventDefault ();
-                    target.style.webkitTransform =
-                        'scale(' + (target.gStartScale * e.scale) + ') ' +
-                        'rotate(' + (target.gStartRotation + e.rotation) + 'deg)';
+                    //target.style.webkitTransform =
+                    //    'scale(' + (target.gStartScale * e.scale) + ') ' +
+                    //    'rotate(' + (target.gStartRotation + e.rotation) + 'deg)';
 
-                //this.processGestureChange(e, new webkitCSSMatrix(e.target.style.transform));
+            var tl = document.querySelector(".touch-log");
+
+            tl.innerText = "gesture Change \r\n" + 
+                            el.hasAttribute(settings.rotateIndicator) + "\r\n" +
+                            tl.innerText;
+
+
+            if (el.hasAttribute(settings.rotateIndicator) && 
+                Math.abs(e.rotation) > settings.rotateThreshold) {
+                //probably going to remove this or make it an optional setting to trigger
+                el.style.webkitTransform =
+                        'rotate(' + (el.gStartRotation + e.rotation) + 'deg)';
+
+                this.rotateCallback(e, m);
+            }
+
+            if (el.hasAttribute(settings.scaleIndicator) && 
+                    Math.abs(e.scale) > settings.scaleThreshold) {
+                //probably going to remove this or make it an optional setting to trigger
+                el.style.webkitTransform =
+                        'scale(' + (el.gStartScale * e.scale) + ') '
+                this.scaleCallback(e, m);
+            }
 
         },
 
