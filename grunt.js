@@ -12,7 +12,8 @@ module.exports = function(grunt) {
     },
     concat: {
         dist: {
-          src: ['js/debug/deeptissue.js',
+          src: ['js/debug/license.txt',
+                'js/debug/deeptissue.js',
                 'js/debug/deeptissue.move.js',
                 'js/debug/deeptissue.swipejs',
                 'js/debug/deeptissue.tap.js',
@@ -23,7 +24,15 @@ module.exports = function(grunt) {
                 ],
           dest: 'js/deep-tissue.js',
           separator: ';'
+        },
+        license: {
+          src: ['js/debug/license.txt',
+                'js/deep-tissue.min.js'
+                ],
+          dest:'js/deep-tissue.min.js',
+          separator: ';'
         }
+
       },
       min: {
         dist: {

@@ -1,4 +1,14 @@
-;
+/*
+Copyright (c) 2013 Chris Love
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+;;
 
 (function (window, undefined) {
 
@@ -59,7 +69,7 @@
 
             return this;
         },
-
+        
         version: "0.0.3",
 
         hasMouse: "",
@@ -227,7 +237,6 @@
                         console.log("should swipe right");
                         that.swipeRightCallback(e, m);
 
-           //             el.removeAttribute(settings.swipeRight);
             }
 
             if (el.hasAttribute(settings.swipeLeft) &&
@@ -290,7 +299,7 @@
                     Math.abs(e.scale) > settings.scaleThreshold) {
                 //probably going to remove this or make it an optional setting to trigger
                 el.style.webkitTransform =
-                        'scale(' + (el.gStartScale * e.scale) + ') '
+                        'scale(' + (el.gStartScale * e.scale) + ') ';
                 this.scaleCallback(e, m);
             }
 
@@ -424,19 +433,19 @@
         extend: function () {
 
             var target = arguments[0] || {},
-		        i = 1,
-                src, name,
+                i = 1,
+                src, prop,
                 copy,
                 options,
-		        length = arguments.length;
+                length = arguments.length;
 
             for (; i < length; i++) {
                 // Only deal with non-null/undefined values
                 if ((options = arguments[i]) !== null) {
                     // Extend the base object
                     for (name in options) {
-                        src = target[name];
-                        copy = options[name];
+                        src = target[prop];
+                        copy = options[prop];
 
                         // Prevent never-ending loop
                         if (target === copy) {
@@ -444,7 +453,7 @@
                         }
 
                         if (copy !== undefined) {
-                            target[name] = copy;
+                            target[prop] = copy;
                         }
                     }
                 }
@@ -746,7 +755,7 @@
                 if (!el.hasAttribute(settings.moveTouchEnded) &&
                             el.hasAttribute(settings.moveTouchInitial)) {
 
-                    var start = JSON.parse(el.getAttribute(settings.moveTouchInitial)),
+                    start = JSON.parse(el.getAttribute(settings.moveTouchInitial)),
                                 end = that.getTouchPoints(evt),
                                 translate = that.calculateTranslation(start, end);
 
@@ -1076,14 +1085,6 @@
 
         if (callback) {
             that.tapHoldBeginCallback = callback;
-        }
-
-        if (cancelcallback) {
-            that.tapHoldCancelCallback = cancelcallback;
-        }
-
-        if (!endcallback) {
-            that.tapHoldEndCallback = endcallback;
         }
 
         if (this.hasmsGesture) {
