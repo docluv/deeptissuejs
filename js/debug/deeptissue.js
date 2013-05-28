@@ -15,13 +15,11 @@
 
         init: function (node, customSettings) {
 
-      //      var that = this;
-
             if (!node) {
                 return node;
             }
 
-            if ("length" in node) {  //rude detection for nodeList
+            if ("length" in node) {  //crude detection for nodeList
                 this.node = node;
             } else {
                 this.node = [node];
