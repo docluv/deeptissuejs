@@ -10,7 +10,7 @@
         foo = foo,
 
 
-     deeptissue = function (node, customSettings) {
+    deeptissue = function (node, customSettings) {
 
         return new deeptissue.fn.init(node, customSettings);
     };
@@ -170,7 +170,6 @@
         scaleCallback: foo,
         tapCallback: foo,
         doubleTapCallback: foo,
-        tapHoldCallback: foo,
 
         processGestureChange: function (e, m) {
 
@@ -892,6 +891,7 @@
 
         },
 
+        //swipe methods
         swipeRight: function (callback, threshold) {
 
             this.setupIndicator(callback, "swipeRightCallback", threshold,
@@ -917,8 +917,8 @@
             return this;
         },
 
-        
-            //may add a threshold value, but for now just assume it should always fire.
+        //move
+        //may add a threshold value, but for now just assume it should always fire.
         move : function (callback) {
 
             this.setupIndicator(callback, "moveCallback", 0,
@@ -943,6 +943,7 @@
 
         },
 
+        //rotate
         rotate : function (callback) {
 
             this.setupIndicator(callback, "rotateCallback", 0,
@@ -951,6 +952,7 @@
 
         },
 
+        //scale
         scale : function (callback) {
 
             this.setupIndicator(callback, "scaleCallback", 0,
@@ -959,6 +961,158 @@
 
         },
     
+        //Tap
+        tap : function (callback) {
+
+            var that = this;
+
+            if (!callback) {
+                callback = foo;
+            }
+
+            if (that.hasmsGesture) {
+
+                [ ].forEach.call(this.node, function (el) {
+                    el.addEventListener("MSGestureTap", callback, false);
+                });
+
+            } else {
+
+                this.setupIndicator(callback, "tapCallback", 0,
+                                    "", "tapIndicator");
+
+            }
+
+            return this;
+
+        },
+
+        //Double Tap Members
+
+        dblTap : function (callback) {
+
+            var that = this,
+                settings = this.settings,
+                tl = document.querySelector(".touch-log");
+
+            if (callback) {
+                settings.doubleTapCallback = callback;
+            }
+
+            this.setupIndicator(callback, "doubleTapCallback", 0,
+                                "", "doubleTapIndicator");
+
+            return this;
+
+        },
+
+        //Tap Hold Members
+        tapHold : function (callback, endcallback, cancelcallback) {
+
+            var that = this;
+
+            if (callback) {
+                that.tapHoldBeginCallback = callback;
+            }
+
+            if (this.hasmsGesture) {
+
+                that.tapHoldBeginCallback = callback;
+                that.tapHoldEndCallback = endcallback;
+                that.tapHoldCancelCallback = cancelcallback;
+
+                [ ].forEach.call(this.node, function (el) {
+
+                    that.preventTapHoldContext(el);
+
+                    el.addEventListener("MSGestureHold", function (evt) {
+                        that.tapHoldCallback.call(that, evt);
+                    }, false);
+
+                });
+
+            } else {
+
+                [ ].forEach.call(this.node, function (el) {
+
+                    that.preventTapHoldContext(el);
+
+                    el.addEventListener(that.touchStart, function (evt) {
+                        that.setupTapHold(el, evt);
+                    });
+
+                    if (that.hasMouse) {
+                        el.addEventListener("mousedown", function (evt) {
+                            that.setupTapHold(el, evt);
+                        });
+                    }
+
+                }, false);
+
+            }
+
+            return this;
+        },
+
+        preventTapHoldContext: function(elm){
+          
+          elm.addEventListener("contextmenu", function (e) {
+              e.preventDefault();    // Disables system menu
+            }, false);
+  
+        },
+
+        setupTapHold : function (el, evt) {
+
+            var that = this,
+                tht;
+
+            tht = setTimeout(function () {
+                that.tapHoldBeginCallback.call(that, evt);
+                clearTimeout(tht);
+            }, 500);
+
+            el.addEventListener(that.touchEnd, function (evt) {
+                clearTimeout(tht);
+            }, false);
+
+            el.addEventListener(that.touchCancel, function (evt) {
+                clearTimeout(tht);
+            }, false);
+
+        },
+
+        tapHoldBeginCallback : foo,
+        tapHoldEndCallback : foo,
+        tapHoldCancelCallback : foo,
+
+        tapHoldCallback : function (evt) {
+
+            var that = this;
+
+            evt.preventDefault();
+
+           // console.info("evt.detail - " + evt.detail);
+
+            if (evt.detail & evt.MSGESTURE_FLAG_BEGIN) {
+
+                // Begin signals the start of a gesture. For the Hold gesture, this means the user has been holding long enough in place that the gesture will become a complete press & hold if the finger is lifted.
+                that.tapHoldBeginCallback.call(that, evt);
+            }
+
+            if (evt.detail & evt.MSGESTURE_FLAG_END) {
+
+                // End signals the end of the gesture.
+                that.tapHoldEndCallback.call(that, evt);
+            }
+
+            if (evt.detail & evt.MSGESTURE_FLAG_CANCEL) {
+
+                // Cancel signals the user started the gesture but cancelled it. For hold, this occurs when the user drags away before lifting. This flag is sent together with the End flag, signaling the gesture recognition is complete.
+                that.tapHoldCancelCallback.call(that, evt);
+            }
+
+        },
 
         settings: {
             allowPageScroll: true,
