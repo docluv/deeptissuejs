@@ -4,7 +4,13 @@
 
     "use strict";
 
-    var deeptissue = function (node, customSettings) {
+    HTMLElement.prototype.ha = HTMLElement.prototype,ha;
+
+    var querySelector = document.querySelector,
+        foo = foo,
+
+
+     deeptissue = function (node, customSettings) {
 
         return new deeptissue.fn.init(node, customSettings);
     };
@@ -19,13 +25,15 @@
                 return node;
             }
 
-            if ("length" in node) {  //crude detection for nodeList
+            if ("length" in node) {  //rude detection for nodeList
                 this.node = node;
             } else {
                 this.node = [node];
             }
 
-            this.settings = this.extend({}, this.settings, customSettings);
+            this["settings"] = this.extend({}, 
+                                                this["settings"], 
+                                                        customSettings);
             this.buildVendorNames();
 
             this.touchType = window.navigator.msPointerEnabled ? "pointer" :
@@ -99,7 +107,7 @@
 
             } catch (ex) {
 
-                var tl = document.querySelector(".touch-log");
+                var tl = querySelector(".touch-log");
 
                 tl.innerText = "setUpTouchGestures is broken \r\n" + tl.innerText;
                 return false;
@@ -150,18 +158,19 @@
 
         },
 
-        swipeRightCallback: function () { },
-        swipeLeftCallback: function () { },
-        swipeUpCallback: function () { },
-        swipeDownCallback: function () { },
-        moveCallback: function () { },
-        moveHorizontalCallback: function () { },
-        moveVerticalCallback: function () { },
-        rotateCallback: function () { },
-        scaleCallback: function () { },
-        tapCallback: function () { },
-        doubleTapCallback: function () { },
-        tapHoldCallback: function () { },
+
+        swipeRightCallback: foo,
+        swipeLeftCallback: foo,
+        swipeUpCallback: foo,
+        swipeDownCallback: foo,
+        moveCallback: foo,
+        moveHorizontalCallback: foo,
+        moveVerticalCallback: foo,
+        rotateCallback: foo,
+        scaleCallback: foo,
+        tapCallback: foo,
+        doubleTapCallback: foo,
+        tapHoldCallback: foo,
 
         processGestureChange: function (e, m) {
 
@@ -177,69 +186,82 @@
                 el = e.target;
 
             ////only for dev testing, remove
-            //var tl = document.querySelector(".touch-log");
+            //var tl = querySelector(".touch-log");
 
             //    tl.innerText = "rotating " +
             //                        e.rotation + "\n" +
             //                        el.innerText;
 
 
-            if (el.hasAttribute(settings.rotateIndicator) &&
+            if (el.ha(settings.rotateIndicator) &&
                 Math.abs(e.rotation) > settings.rotateThreshold) {
-                //probably going to remove this or make it an optional setting to trigger
-                el.style.transform = m.rotate(e.rotation * 180 / Math.PI); // Apply Rotation
-
+                
+                if(settings.autoRotate){
+                    el.style.transform = m.rotate(e.rotation * 180 / Math.PI); // Apply Rotation    
+                }
+                
                 this.rotateCallback(e, m);
             }
 
-            if (el.hasAttribute(settings.scaleIndicator) && Math.abs(e.scale) > settings.scaleThreshold) {
-                //probably going to remove this or make it an optional setting to trigger
-                el.style.transform = m.scale(e.scale); // Apply Rotation
+            if (el.ha(settings.scaleIndicator) && Math.abs(e.scale) > settings.scaleThreshold) {
+                
+                if(settings.autoScale){
+                    el.style.transform = m.scale(e.scale); // Apply Rotation
+                }
+
                 this.scaleCallback(e, m);
             }
 
-            if (el.hasAttribute(settings.moveIndicator) &&
+            if (el.ha(settings.moveIndicator) &&
                     (Math.abs(e.translationX) > settings.moveThreshold ||
                      Math.abs(e.translationY) > settings.moveThreshold)) {
 
-                el.style.transform = m.translate(e.translationX, e.translationY, 0); // Apply Translation;
+                if(settings.autoMove){
+                    el.style.transform = m.translate(e.translationX, e.translationY, 0); // Apply Translation;
+                }
+                
                 this.moveCallback(e, m);
             }
 
-            if (el.hasAttribute(settings.horizontalIndicator) &&
+            if (el,ha(settings.horizontalIndicator) &&
                     Math.abs(e.translationX) > settings.moveThreshold) {
 
-                e.target.style.transform = m.translate(e.translationX, 0, 0); // Apply Translation;
+                if(settings.autoHorizontalMove){
+                    e.target.style.transform = m.translate(e.translationX, 0, 0); // Apply Translation;
+                }
+
                 this.moveHorizontalCallback(e, m);
             }
 
-            if (el.hasAttribute(settings.verticalIndicator) &&
+            if (el,ha(settings.verticalIndicator) &&
                     Math.abs(e.translationY) > settings.moveThreshold) {
-                e.target.style.transform = m.translate(0, e.translationY, 0); // Apply Translation;
+
+                if(settings.autoVertical){
+                    e.target.style.transform = m.translate(0, e.translationY, 0); // Apply Translation;
+                }
+                
                 this.moveVerticalCallback(e, m);
             }
 
-            if (el.hasAttribute(settings.swipeRight) &&
+            if (el,ha(settings.swipeRight) &&
                     e.translationX > 0 && //need to add the threshold check here
                     e.translationX > settings.swipeRightThreshold) {
 
-                console.log("should swipe right");
                 that.swipeRightCallback(e, m);
 
             }
 
-            if (el.hasAttribute(settings.swipeLeft) &&
+            if (el,ha(settings.swipeLeft) &&
                     e.translationX < 0 &&
                     Math.abs(e.translationX) > settings.swipeLeftThreshold) {
 
-                console.log("should swipe left");
                 that.swipeLeftCallback(e, m);
 
                 //      el.removeAttribute(settings.swipeLeft);
             }
 
             //I know the < 0 && > 0 seem counter intuitive, but that seems to be how it works
-            if (el.hasAttribute(settings.swipeUp) && e.translationY < 0 &&
+            if (el,ha(settings.swipeUp) && e.translationY < 0 &&
                     Math.abs(e.translationY) > settings.swipeUpThreshold) {
 
                 that.swipeUpCallback(e, m);
@@ -247,7 +269,7 @@
                 //       el.removeAttribute(settings.swipeUp);
             }
 
-            if (el.hasAttribute(settings.swipeDown) && e.translationY > 0 &&
+            if (el,ha(settings.swipeDown) && e.translationY > 0 &&
                     e.translationY > settings.swipeDownThreshold) {
 
                 that.swipeDownCallback(e, m);
@@ -268,14 +290,14 @@
             //    'scale(' + (target.gStartScale * e.scale) + ') ' +
             //    'rotate(' + (target.gStartRotation + e.rotation) + 'deg)';
 
-            var tl = document.querySelector(".touch-log");
+            var tl = querySelector(".touch-log");
 
             tl.innerText = "gesture Change \r\n" +
-                            el.hasAttribute(settings.rotateIndicator) + "\r\n" +
+                            el,ha(settings.rotateIndicator) + "\r\n" +
                             tl.innerText;
 
 
-            if (el.hasAttribute(settings.rotateIndicator) &&
+            if (el,ha(settings.rotateIndicator) &&
                     Math.abs(e.rotation) > settings.rotateThreshold) {
                 //probably going to remove this or make it an optional setting to trigger
                 el.style.webkitTransform =
@@ -284,7 +306,7 @@
                 this.rotateCallback(e, m);
             }
 
-            if (el.hasAttribute(settings.scaleIndicator) &&
+            if (el,ha(settings.scaleIndicator) &&
                     Math.abs(e.scale) > settings.scaleThreshold) {
                 //probably going to remove this or make it an optional setting to trigger
                 el.style.webkitTransform =
@@ -375,20 +397,19 @@
         extend: function () {
 
             var target = arguments[0] || {},
-                i = 1,
-                src, 
-                prop,
+		        i = 1,
+                src, name,
                 copy,
                 options,
-                length = arguments.length;
+		        length = arguments.length;
 
-            for (i = 1; i < length; i++) {
+            for (; i < length; i++) {
                 // Only deal with non-null/undefined values
                 if ((options = arguments[i]) !== null) {
                     // Extend the base object
                     for (name in options) {
-                        src = target[prop];
-                        copy = options[prop];
+                        src = target[name];
+                        copy = options[name];
 
                         // Prevent never-ending loop
                         if (target === copy) {
@@ -396,7 +417,7 @@
                         }
 
                         if (copy !== undefined) {
-                            target[prop] = copy;
+                            target[name] = copy;
                         }
                     }
                 }
@@ -404,6 +425,7 @@
 
             return target;
         },
+
 
         div: undefined,
         support: {},
@@ -457,8 +479,8 @@
 
             var that = this;
 
-            if (el.hasAttribute(settings.doubleTapIndicator) &&
-                    el.hasAttribute(settings.doubleTapStart)) {
+            if (el,ha(settings.doubleTapIndicator) &&
+                    el,ha(settings.doubleTapStart)) {
 
                 el.removeAttribute(settings.doubleTapStart);
                 clearTimeout(el.getAttribute(settings.doubleTapStart));
@@ -466,8 +488,8 @@
 
             }
 
-            if (el.hasAttribute(settings.doubleTapIndicator) &&
-                    !el.hasAttribute(settings.doubleTapStart)) {
+            if (el,ha(settings.doubleTapIndicator) &&
+                    !el,ha(settings.doubleTapStart)) {
 
                 el.setAttribute(settings.doubleTapStart,
                                 setTimeout(function () {
@@ -483,11 +505,11 @@
 
             var that = this;
 
-            if (el.hasAttribute(settings.swipeRight)) {
+            if (el,ha(settings.swipeRight)) {
 
                 el.removeAttribute(settings.swipeRightEnd);
 
-                if (!el.hasAttribute(settings.swipeRightInit)) {
+                if (!el,ha(settings.swipeRightInit)) {
 
                     el.setAttribute(settings.swipeRightInit,
                                 JSON.stringify(that.getTouchPoints(evt)));
@@ -496,11 +518,11 @@
 
             }
 
-            if (el.hasAttribute(settings.swipeLeft)) {
+            if (el,ha(settings.swipeLeft)) {
 
                 el.removeAttribute(settings.swipeLeftEnd);
 
-                if (!el.hasAttribute(settings.swipeLeftInit)) {
+                if (!el,ha(settings.swipeLeftInit)) {
 
                     el.setAttribute(settings.swipeLeftInit,
                                 JSON.stringify(that.getTouchPoints(evt)));
@@ -509,11 +531,11 @@
 
             }
 
-            if (el.hasAttribute(settings.swipeUp)) {
+            if (el,ha(settings.swipeUp)) {
 
                 el.removeAttribute(settings.swipeUpEnd);
 
-                if (!el.hasAttribute(settings.swipeUpInit)) {
+                if (!el,ha(settings.swipeUpInit)) {
 
                     el.setAttribute(settings.swipeUpInit,
                                 JSON.stringify(that.getTouchPoints(evt)));
@@ -522,11 +544,11 @@
 
             }
 
-            if (el.hasAttribute(settings.swipeDown)) {
+            if (el,ha(settings.swipeDown)) {
 
                 el.removeAttribute(settings.swipeDownEnd);
 
-                if (!el.hasAttribute(settings.swipeDownInit)) {
+                if (!el,ha(settings.swipeDownInit)) {
 
                     el.setAttribute(settings.swipeDownInit,
                                 JSON.stringify(that.getTouchPoints(evt)));
@@ -586,11 +608,11 @@
 
             console.log("touch start");
 
-            if (el.hasAttribute(settings.moveIndicator)) {
+            if (el,ha(settings.moveIndicator)) {
 
                 el.removeAttribute(settings.moveTouchEnded);
 
-                if (!el.hasAttribute(settings.moveTouchInitial)) {
+                if (!el,ha(settings.moveTouchInitial)) {
 
                     el.setAttribute(settings.moveTouchInitial,
                                         JSON.stringify(that.getTouchPoints(evt)));
@@ -598,22 +620,22 @@
 
             }
 
-            if (el.hasAttribute(settings.horizontalIndicator)) {
+            if (el,ha(settings.horizontalIndicator)) {
 
                 el.removeAttribute(settings.horizontalTouchEnd);
 
-                if (!el.hasAttribute(settings.horizontalTouchInit)) {
+                if (!el,ha(settings.horizontalTouchInit)) {
 
                     el.setAttribute(settings.horizontalTouchInit, JSON.stringify(that.getTouchPoints(evt)));
                 }
 
             }
 
-            if (el.hasAttribute(settings.verticalIndicator)) {
+            if (el,ha(settings.verticalIndicator)) {
 
                 el.removeAttribute(settings.verticalTouchEnd);
 
-                if (!el.hasAttribute(settings.verticalTouchInit)) {
+                if (!el,ha(settings.verticalTouchInit)) {
 
                     el.setAttribute(settings.verticalTouchInit, JSON.stringify(that.getTouchPoints(evt)));
                 }
@@ -622,8 +644,8 @@
 
             that.setupSwipe(evt, el, settings);
 
-            if (el.hasAttribute(settings.tapIndicator) &&
-                    !el.hasAttribute(settings.tapStart)) {
+            if (el,ha(settings.tapIndicator) &&
+                    !el,ha(settings.tapStart)) {
 
                 el.setAttribute(settings.tapStart,
                                 setTimeout(function () {
@@ -644,39 +666,39 @@
 
             evt.preventDefault();
 
-            if (el.hasAttribute(settings.moveTouchInitial)) {
+            if (el,ha(settings.moveTouchInitial)) {
                 el.setAttribute(settings.moveTouchEnded, "true");
                 //el.removeAttribute(settings.moveTouchInitial);
             }
 
-            if (el.hasAttribute(settings.horizontalIndicator)) {
+            if (el,ha(settings.horizontalIndicator)) {
                 el.setAttribute(settings.horizontalTouchEnd, "true");
                 //  el.removeAttribute(settings.horizontalTouchInit);
             }
 
-            if (el.hasAttribute(settings.verticalIndicator)) {
+            if (el,ha(settings.verticalIndicator)) {
                 el.setAttribute(settings.verticalTouchEnd, "true");
                 //   el.removeAttribute(settings.verticalTouchInit);
             }
 
-            if (el.hasAttribute(settings.swipeRight)) {
+            if (el,ha(settings.swipeRight)) {
                 el.setAttribute(settings.swipeRightEnd, "true");
             }
 
-            if (el.hasAttribute(settings.swipeLeft)) {
+            if (el,ha(settings.swipeLeft)) {
                 el.setAttribute(settings.swipeLeftEnd, "true");
             }
 
-            if (el.hasAttribute(settings.swipeUp)) {
+            if (el,ha(settings.swipeUp)) {
                 el.setAttribute(settings.swipeUpEnd, "true");
             }
 
-            if (el.hasAttribute(settings.swipeDown)) {
+            if (el,ha(settings.swipeDown)) {
                 el.setAttribute(settings.swipeDownEnd, "true");
             }
 
-            if (el.hasAttribute(settings.tapIndicator) &&
-                el.hasAttribute(settings.tapStart)) {
+            if (el,ha(settings.tapIndicator) &&
+                el,ha(settings.tapStart)) {
 
                 that.tapCallback(evt);
                 clearTimeout(el.getAttribute(settings.tapStart));
@@ -693,10 +715,10 @@
 
             evt.preventDefault();
 
-            if (el.hasAttribute(settings.moveIndicator)) {
+            if (el,ha(settings.moveIndicator)) {
 
-                if (!el.hasAttribute(settings.moveTouchEnded) &&
-                            el.hasAttribute(settings.moveTouchInitial)) {
+                if (!el,ha(settings.moveTouchEnded) &&
+                            el,ha(settings.moveTouchInitial)) {
 
                     start = JSON.parse(el.getAttribute(settings.moveTouchInitial)),
                                 end = that.getTouchPoints(evt),
@@ -711,10 +733,10 @@
 
             }
 
-            if (el.hasAttribute(settings.horizontalIndicator)) {
+            if (el,ha(settings.horizontalIndicator)) {
 
-                if (!el.hasAttribute(settings.horizontalTouchEnd) &&
-                                el.hasAttribute(settings.horizontalTouchInit)) {
+                if (!el,ha(settings.horizontalTouchEnd) &&
+                                el,ha(settings.horizontalTouchInit)) {
 
                     console.log("should -horizontal move");
 
@@ -733,10 +755,10 @@
 
             }
 
-            if (el.hasAttribute(settings.verticalIndicator)) {
+            if (el,ha(settings.verticalIndicator)) {
 
-                if (!el.hasAttribute(settings.verticalTouchEnd) &&
-                            el.hasAttribute(settings.verticalTouchInit)) {
+                if (!el,ha(settings.verticalTouchEnd) &&
+                            el,ha(settings.verticalTouchInit)) {
 
                     var start = JSON.parse(el.getAttribute(settings.verticalTouchInit)),
                                 end = that.getTouchPoints(evt),
@@ -753,10 +775,10 @@
 
             }
 
-            if (el.hasAttribute(settings.swipeRight)) {
+            if (el,ha(settings.swipeRight)) {
 
-                if (!el.hasAttribute(settings.swipeRightEnd) &&
-                            el.hasAttribute(settings.swipeRightInit)) {
+                if (!el,ha(settings.swipeRightEnd) &&
+                            el,ha(settings.swipeRightInit)) {
 
                     console.log("should swipe right");
 
@@ -777,10 +799,10 @@
 
             }
 
-            if (el.hasAttribute(settings.swipeLeft)) {
+            if (el,ha(settings.swipeLeft)) {
 
-                if (!el.hasAttribute(settings.swipeLeftEnd) &&
-                            el.hasAttribute(settings.swipeLeftInit)) {
+                if (!el,ha(settings.swipeLeftEnd) &&
+                            el,ha(settings.swipeLeftInit)) {
 
                     console.log("should swipe left");
 
@@ -802,10 +824,10 @@
 
             }
 
-            if (el.hasAttribute(settings.swipeUp)) {
+            if (el,ha(settings.swipeUp)) {
 
-                if (!el.hasAttribute(settings.swipeUpEnd) &&
-                            el.hasAttribute(settings.swipeUpInit)) {
+                if (!el,ha(settings.swipeUpEnd) &&
+                            el,ha(settings.swipeUpInit)) {
 
                     console.log("should swipe up");
 
@@ -826,10 +848,10 @@
 
             }
 
-            if (el.hasAttribute(settings.swipeDown)) {
+            if (el,ha(settings.swipeDown)) {
 
-                if (!el.hasAttribute(settings.swipeDownEnd) &&
-                            el.hasAttribute(settings.swipeDownInit)) {
+                if (!el,ha(settings.swipeDownEnd) &&
+                            el,ha(settings.swipeDownInit)) {
 
                     console.log("should swipe down");
 
@@ -851,7 +873,7 @@
             }
 
             /*
-            if (el.hasAttribute("data-rotate") && Math.abs(0.0019) > this.settings.rotateThreshold) {
+            if (el,ha("data-rotate") && Math.abs(0.0019) > this.settings.rotateThreshold) {
 
             console.log("do touch rotate");
             //el.style.transform = m.rotate(e.rotation * 180 / Math.PI); // Apply Rotation
@@ -859,7 +881,7 @@
             //this.rotateCallback(e, m);
             }
 
-            if (el.hasAttribute("data-scale") && Math.abs(e.scale) > this.settings.scaleThreshold) {
+            if (el,ha("data-scale") && Math.abs(e.scale) > this.settings.scaleThreshold) {
 
             console.log("do touch scale");
 
@@ -995,7 +1017,13 @@
 
             verticalIndicator: "data-move-vertical",
             verticalTouchInit: "data-vertical-touch-initial",
-            verticalTouchEnd: "data-vertical-touch-ended"
+            verticalTouchEnd: "data-vertical-touch-ended",
+
+            autoMove: true,
+            autoRotate: true,
+            autoScale: true,
+            autoHorizontalMove: true,
+            autoVerticalMove: true
 
         }
 
