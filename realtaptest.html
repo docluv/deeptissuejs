@@ -36,7 +36,7 @@
     <body>
         <header>
             <a href="/" title="Deeptissue.js a Touch Library" class="no-decor">
-                <img src="img\m\apple-touch-icon.png" alt="deeptissue.js" class="site-logo"/><h1>Deeptissue.js</h1></a>
+                <img src="img\m\apple-touch-icon.png" alt="deeptissue.js" class="site-logo" /><h1>Deeptissue.js</h1></a>
             <h2>A Gesture Abstraction Library for both MSPointer and WebKit Touch APIs</h2>
             <nav>
                 <a href="realtaptest.html" class="active">TAP</a>
@@ -50,51 +50,54 @@
         <section class="touch-area dbl-tap"> Double Tap</section>
         <section class="touch-area tap-hold">Tap Hold</section>
         <section class="touch-log">Log Goes Here</section>
+        <script src="js/debug/mbp.js" type="text/javascript"></script>
 
         <script src="js/debug/deeptissue.js" type="text/javascript"></script>
 
         <script type="text/javascript">
 
+            
             var tl = document.querySelector(".touch-log"),
                 dt = deeptissue(document.querySelectorAll(".sgl-tap")),
                 dbt = deeptissue(document.querySelectorAll(".dbl-tap")),
                 th = deeptissue(document.querySelectorAll((".tap-hold")));
-
+            
             dt.tap(function (evt) {
-
+            
                 tl.innerText = "Single Tap\n" + tl.innerText;
-
+            
                 console.log(evt.type);
                 console.log(evt.screenX);
                 console.log(evt.screenY);
-
+            
             });
-
+            
             dbt.dblTap(function (evt){ 
             
                 tl.innerText = "Double Tap\n" + tl.innerText;
             
             });
-
+            
             th.tapHold(function (evt) {
-
+            
                 tl.innerText = "Tap Hold\n" + tl.innerText;
-
+            
             }, function (evt) {
-
+            
                 tl.innerText = "Tap Hold End\n" + tl.innerText;
-
+            
             }, function (evt) {
-
+            
                 tl.innerText = "Tap Hold Cancel\n" + tl.innerText;
-
+            
             });
-
-
+            
+            
         </script>
 
         <script type="text/javascript">
 
+            
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-83556-6']);
             _gaq.push(['_trackPageview']);
