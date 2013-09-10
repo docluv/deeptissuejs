@@ -14,14 +14,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ;
 
-(function (window, undefined) {
+(function (window, $, undefined) {
 
     "use strict";
 
     HTMLElement.prototype.ha = HTMLElement.prototype.hasAttribute;
 
     var querySelector = document.querySelector,
-        foo = foo,
 
 
     deeptissue = function (node, customSettings) {
@@ -45,10 +44,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 this.node = [node];
             }
 
-            this["settings"] = this.extend({}, 
-                                                this["settings"], 
-                                                        customSettings);
-            this.buildVendorNames();
+            this["settings"] = $.extend({}, this["settings"], customSettings);
+
+            $.buildVendorNames();
 
             this.touchType = window.navigator.msPointerEnabled ? "pointer" :
                                 "ontouchstart" in window ? "touch" : "mouse";
@@ -80,7 +78,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             return this;
         },
 
-        version: "0.0.4",
+        version: "0.0.5",
 
         hasMouse: "",
         touchType: "",
@@ -99,14 +97,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
             try {
 
-                [ ].forEach.call(this.node, function (el) {
+                [].forEach.call(this.node, function (el) {
 
                     el.addEventListener("gesturestart", function (evt) {
 
                         evt.preventDefault();
 
                     });
-
 
                     el.addEventListener("gesturechange", function (evt) {
 
@@ -121,9 +118,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
             } catch (ex) {
 
-                var tl = querySelector(".touch-log");
+                console.error("setUpTouchGestures is broken \r\n" + tl.innerText);
 
-                tl.innerText = "setUpTouchGestures is broken \r\n" + tl.innerText;
                 return false;
             }
 
@@ -136,7 +132,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
             try {
 
-                [ ].forEach.call(this.node, function (el) {
+                [].forEach.call(this.node, function (el) {
 
                     var t = new MSGesture();
 
@@ -162,6 +158,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                             that.doDoubleTap(evt, el, settings);
                         });
 
+                        ///Double Tap functionality
+                        el.addEventListener("MSGestureEnd", function (evt) {
+                            console.info("MSGestureEnd");
+                            that.endGesture();
+                        });
+
                     }
 
                 });
@@ -172,53 +174,46 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
         },
 
+        endGesture: function () {
 
-        swipeRightCallback: foo,
-        swipeLeftCallback: foo,
-        swipeUpCallback: foo,
-        swipeDownCallback: foo,
-        moveCallback: foo,
-        moveHorizontalCallback: foo,
-        moveVerticalCallback: foo,
-        rotateCallback: foo,
-        scaleCallback: foo,
-        tapCallback: foo,
-        doubleTapCallback: foo,
+            this.swipping = false;
+
+            this.swipeX = null;
+            this.swipeY = null;
+
+        },
+
+        swipeRightCallback: $.noop,
+        swipeLeftCallback: $.noop,
+        swipeUpCallback: $.noop,
+        swipeDownCallback: $.noop,
+        moveCallback: $.noop,
+        moveHorizontalCallback: $.noop,
+        moveVerticalCallback: $.noop,
+        rotateCallback: $.noop,
+        scaleCallback: $.noop,
+        tapCallback: $.noop,
+        doubleTapCallback: $.noop,
 
         processGestureChange: function (e, m) {
-
-            //            e.preventDefault();
-
-            /*
-            Note: Really need to figure out how to Handle FireFox and possible Opera because
-            it does not look like they support a CSSMatrix object.
-            */
 
             var that = this,
                 settings = this.settings,
                 el = e.target;
 
-            ////only for dev testing, remove
-            //var tl = querySelector(".touch-log");
-
-            //    tl.innerText = "rotating " +
-            //                        e.rotation + "\n" +
-            //                        el.innerText;
-
-
             if (el.ha(settings.rotateIndicator) &&
                 Math.abs(e.rotation) > settings.rotateThreshold) {
-                
-                if(settings.autoRotate){
+
+                if (settings.autoRotate) {
                     el.style.transform = m.rotate(e.rotation * 180 / Math.PI); // Apply Rotation    
                 }
-                
+
                 this.rotateCallback(e, m);
             }
 
             if (el.ha(settings.scaleIndicator) && Math.abs(e.scale) > settings.scaleThreshold) {
-                
-                if(settings.autoScale){
+
+                if (settings.autoScale) {
                     el.style.transform = m.scale(e.scale); // Apply Rotation
                 }
 
@@ -229,17 +224,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                     (Math.abs(e.translationX) > settings.moveThreshold ||
                      Math.abs(e.translationY) > settings.moveThreshold)) {
 
-                if(settings.autoMove){
+                if (settings.autoMove) {
                     el.style.transform = m.translate(e.translationX, e.translationY, 0); // Apply Translation;
                 }
-                
+
                 this.moveCallback(e, m);
             }
 
             if (el.ha(settings.horizontalIndicator) &&
                     Math.abs(e.translationX) > settings.moveThreshold) {
 
-                if(settings.autoHorizontalMove){
+                if (settings.autoHorizontalMove) {
                     e.target.style.transform = m.translate(e.translationX, 0, 0); // Apply Translation;
                 }
 
@@ -249,49 +244,131 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             if (el.ha(settings.verticalIndicator) &&
                     Math.abs(e.translationY) > settings.moveThreshold) {
 
-                if(settings.autoVerticalMove){
+                if (settings.autoVerticalMove) {
                     e.target.style.transform = m.translate(0, e.translationY, 0); // Apply Translation;
                 }
-                
+
                 this.moveVerticalCallback(e, m);
             }
 
-            if (el.ha(settings.swipeRight) &&
-                    e.translationX > 0 && //need to add the threshold check here
-                    e.translationX > settings.swipeRightThreshold) {
-
-                that.swipeRightCallback(e, m);
-
-            }
-
-            if (el.ha(settings.swipeLeft) &&
-                    e.translationX < 0 &&
-                    Math.abs(e.translationX) > settings.swipeLeftThreshold) {
-
-                that.swipeLeftCallback(e, m);
-
-                //      el.removeAttribute(settings.swipeLeft);
-            }
-
-            //I know the < 0 && > 0 seem counter intuitive, but that seems to be how it works
-            if (el.ha(settings.swipeUp) && e.translationY < 0 &&
-                    Math.abs(e.translationY) > settings.swipeUpThreshold) {
-
-                that.swipeUpCallback(e, m);
-
-                //       el.removeAttribute(settings.swipeUp);
-            }
-
-            if (el.ha(settings.swipeDown) && e.translationY > 0 &&
-                    e.translationY > settings.swipeDownThreshold) {
-
-                that.swipeDownCallback(e, m);
-                //        el.removeAttribute(settings.swipeDown);
-            }
-
-            console.log(e.translationX + " - " + e.translationY);
+            that.processSwipe(el, e, settings, m);
 
         },
+        
+        processSwipe: function (el, e, settings, m) {
+
+            var that = this,
+                horizontal = false,
+                vertical = false;
+
+            m = m || {};
+
+            //if (that.swipeX !== null || that.swipeY !== null) {
+            //    horizontal = Math.abs((e.clientX - that.swipeX)) >
+            //                Math.abs((e.clientY - that.swipeY));
+            //    vertical = !horizontal;
+            //}
+
+            if (el.ha(settings.swipeRight) && !that.swipping) {
+
+                if (that.swipeX === null) {
+                    that.swipeX = e.clientX;
+                } else if (el.ha(settings.swipeRightInit) &&
+                    (e.clientX > that.swipeX) &&
+                    (e.clientX - that.swipeX) > settings.swipeRightThreshold) {
+
+                    if (!that.swipping) {
+                        console.info("swipeRight");
+
+                        that.swipping = true;
+
+                        that.swipeX = null;
+                        that.swipeY = null;
+                        that.swipeRightCallback(e, m);
+                    }
+
+                }
+
+            }
+
+            if (el.ha(settings.swipeLeft) && !that.swipping) {
+
+                if (that.swipeX === null) {
+                    that.swipeX = e.clientX;
+                } else if (el.ha(settings.swipeLeftInit) &&
+                    (e.clientX < that.swipeX) &&
+                        (e.clientX - that.swipeX) < settings.swipeLeftThreshold) {
+
+                    if (!that.swipping) {
+                        console.info("swipe Left");
+
+                        that.swipping = true;
+
+                        that.swipeX = null;
+                        that.swipeY = null;
+
+                        that.swipeLeftCallback(e, m);
+                    }
+
+                }
+
+            }
+
+            if (el.ha(settings.swipeUp) && !that.swipping) {
+
+                if (that.swipeY === null) {
+                    that.swipeY = e.clientY;
+                } else {
+
+                    //can get a negative value if the finger goes above the window
+                    var clientY = (e.clientY >= 0) ? e.clientY : 0;
+
+                    if (el.ha(settings.swipeUpInit) &&
+                    (e.clientY < that.swipeY) &&
+                        (clientY - that.swipeY) < settings.swipeUpThreshold) {
+
+                        if (!that.swipping) {
+                            console.info("swipeUp");
+
+                            that.swipping = true;
+
+                            that.swipeX = null;
+                            that.swipeY = null;
+
+                            that.swipeUpCallback(e, m);
+                        }
+                    }
+
+                }
+
+            }
+
+            if (el.ha(settings.swipeDown) && !that.swipping) {
+
+                if (that.swipeY === null) {
+                    that.swipeY = e.clientY;
+                } else if (el.ha(settings.swipeDownInit) &&
+                    (e.clientY > that.swipeY) &&
+                    (e.clientY - that.swipeY) > settings.swipeDownThreshold) {
+
+                    if (!that.swipping) {
+                        console.info("swipe Down");
+                        that.swipping = true;
+
+                        that.swipeY = null;
+                        that.swipeX = null;
+                        that.swipeDownCallback(e, m);
+                    }
+
+                }
+
+            }
+
+        },
+
+        swipping: false,
+        swipeX: null,
+        swipeY: null,
 
         gestureChange: function (e) {
 
@@ -299,16 +376,9 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 settings = this.settings;
 
             e.preventDefault();
-            //target.style.webkitTransform =
-            //    'scale(' + (target.gStartScale * e.scale) + ') ' +
-            //    'rotate(' + (target.gStartRotation + e.rotation) + 'deg)';
 
-            var tl = querySelector(".touch-log");
-
-            tl.innerText = "gesture Change \r\n" +
-                            el.ha(settings.rotateIndicator) + "\r\n" +
-                            tl.innerText;
-
+            console.info("gesture Change \r\n" +
+                            el.ha(settings.rotateIndicator) + "\r\n");
 
             if (el.ha(settings.rotateIndicator) &&
                     Math.abs(e.rotation) > settings.rotateThreshold) {
@@ -355,12 +425,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             }
 
             if (threshold) {
-                //    threshold = this.settings[threshholdName] || 0;
-                //} else {
                 that.settings[threshholdName] = threshold;
             }
 
-            [ ].forEach.call(that.node, function (el) {
+            [].forEach.call(that.node, function (el) {
                 el.setAttribute(settings[indicator], "true");
             });
 
@@ -406,86 +474,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
         node: undefined,
 
-        //simple version of the jQuery function
-        extend: function () {
-
-            var target = arguments[0] || {},
-		        i = 1,
-                src, name,
-                copy,
-                options,
-		        length = arguments.length;
-
-            for (; i < length; i++) {
-                // Only deal with non-null/undefined values
-                if ((options = arguments[i]) !== null) {
-                    // Extend the base object
-                    for (name in options) {
-                        src = target[name];
-                        copy = options[name];
-
-                        // Prevent never-ending loop
-                        if (target === copy) {
-                            continue;
-                        }
-
-                        if (copy !== undefined) {
-                            target[name] = copy;
-                        }
-                    }
-                }
-            }
-
-            return target;
-        },
-
-
         div: undefined,
         support: {},
-
-        buildVendorNames: function () {
-
-            this.div = document.createElement('div');
-
-            // Check for the browser's transitions support.
-            this.support.transition = this.getVendorPropertyName('transition');
-            this.support.transitionDelay = this.getVendorPropertyName('transitionDelay');
-            this.support.transform = this.getVendorPropertyName('transform');
-            this.support.transformOrigin = this.getVendorPropertyName('transformOrigin');
-            this.support.transform3d = this.checkTransform3dSupport();
-
-            // Avoid memory leak in IE.
-            this.div = null;
-
-        },
-
-        getVendorPropertyName: function (prop) {
-            var prefixes = ['Moz', 'Webkit', 'O', 'ms'],
-                vendorProp, i,
-                prop_ = prop.charAt(0).toUpperCase() + prop.substr(1);
-
-            if (prop in this.div.style) {
-                return prop;
-            }
-
-            for (i = 0; i < prefixes.length; ++i) {
-
-                vendorProp = prefixes[i] + prop_;
-
-                if (vendorProp in this.div.style) {
-                    return vendorProp;
-                }
-
-            }
-        },
-
-        // Helper function to check if transform3D is supported.
-        // Should return true for Webkits and Firefox 10+.
-        checkTransform3dSupport: function () {
-            this.div.style[this.support.transform] = '';
-            this.div.style[this.support.transform] = 'rotateY(90deg)';
-            return this.div.style[this.support.transform] !== '';
-        },
 
         //DoubleTap Handler
         doDoubleTap: function (evt, el, settings) {
@@ -578,7 +568,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             var that = this,
                 settings = this.settings;
 
-            [ ].forEach.call(this.node, function (el) {
+            [].forEach.call(this.node, function (el) {
 
                 var moveHandler = function (evt) {
 
@@ -599,6 +589,30 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 el.addEventListener(that.touchStart, startHandler);
                 el.addEventListener(that.touchMove, moveHandler);
                 el.addEventListener(that.touchEnd, endHandler);
+                el.addEventListener(that.touchCancel, endHandler);
+
+                el.addEventListener("mouseout", endHandler);
+                el.addEventListener("mouseup", endHandler);
+
+                el.addEventListener(that.touchEnd, function () {
+                    console.info("touchEnd");
+                });
+
+                el.addEventListener("mouseout", function () {
+                    console.info("mouseout");
+                });
+
+                el.addEventListener("mouseup", function () {
+                    console.info("mouseup");
+                });
+
+                el.addEventListener(that.touchCancel, function () {
+                    console.info("touchCancel");
+                });
+
+                el.addEventListener(that.touchOut, function () {
+                    console.info("touchOut");
+                });
 
                 if (that.hasMouse) {
 
@@ -619,7 +633,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
             evt.preventDefault();
 
-            console.log("touch start");
+            console.info("touch start");
 
             if (el.ha(settings.moveIndicator)) {
 
@@ -681,33 +695,38 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
             if (el.ha(settings.moveTouchInitial)) {
                 el.setAttribute(settings.moveTouchEnded, "true");
-                //el.removeAttribute(settings.moveTouchInitial);
             }
 
             if (el.ha(settings.horizontalIndicator)) {
                 el.setAttribute(settings.horizontalTouchEnd, "true");
-                //  el.removeAttribute(settings.horizontalTouchInit);
             }
 
             if (el.ha(settings.verticalIndicator)) {
                 el.setAttribute(settings.verticalTouchEnd, "true");
-                //   el.removeAttribute(settings.verticalTouchInit);
             }
 
             if (el.ha(settings.swipeRight)) {
+                that.swipping = false;
                 el.setAttribute(settings.swipeRightEnd, "true");
+                el.removeAttribute(settings.swipeRightInit);
             }
 
             if (el.ha(settings.swipeLeft)) {
+                that.swipping = false;
                 el.setAttribute(settings.swipeLeftEnd, "true");
+                el.removeAttribute(settings.swipeLeftInit);
             }
 
             if (el.ha(settings.swipeUp)) {
+                that.swipping = false;
                 el.setAttribute(settings.swipeUpEnd, "true");
+                el.removeAttribute(settings.swipeUpInit);
             }
 
             if (el.ha(settings.swipeDown)) {
+                that.swipping = false;
                 el.setAttribute(settings.swipeDownEnd, "true");
+                el.removeAttribute(settings.swipeDownInit);
             }
 
             if (el.ha(settings.tapIndicator) &&
@@ -788,120 +807,19 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
             }
 
-            if (el.ha(settings.swipeRight)) {
+            if (el.ha(settings.swipeRightInit) ||
+                    el.ha(settings.swipeLefttInit) ||
+                    el.ha(settings.swipeUpInit) ||
+                    el.ha(settings.swipeDownInit)) {
 
-                if (!el.ha(settings.swipeRightEnd) &&
-                            el.ha(settings.swipeRightInit)) {
-
-                    console.log("should swipe right");
-
-                    var start = JSON.parse(el.getAttribute(settings.swipeRightInit)),
-                                end = that.getTouchPoints(evt),
-                                translate = that.calculateTranslation(start, end);
-
-                    if (translate.translationX > 0 &&
-                        Math.abs(translate.translationX) > settings.swipeRightThreshold) {
-
-                        that.swipeRightCallback(evt, null, translate);
-
-                        el.setAttribute(settings.swipeLeftInit, JSON.stringify(that.getTouchPoints(evt)));
-                        el.setAttribute(settings.swipeRightInit, JSON.stringify(that.getTouchPoints(evt)));
-                    }
-
+                if (evt.touches) {
+                    evt.clientX = evt.touches[0].clientX;
+                    evt.clientY = evt.touches[0].clientY;
                 }
 
-            }
-
-            if (el.ha(settings.swipeLeft)) {
-
-                if (!el.ha(settings.swipeLeftEnd) &&
-                            el.ha(settings.swipeLeftInit)) {
-
-                    console.log("should swipe left");
-
-                    var start = JSON.parse(el.getAttribute(settings.swipeLeftInit)),
-                                end = that.getTouchPoints(evt),
-                                translate = that.calculateTranslation(start, end);
-
-                    if (translate.translationX < 0 &&
-                        Math.abs(translate.translationX) > settings.swipeLeftThreshold) {
-
-                        that.swipeLeftCallback(evt, null, translate);
-
-                        el.setAttribute(settings.swipeLeftInit, JSON.stringify(that.getTouchPoints(evt)));
-                        el.setAttribute(settings.swipeRightInit, JSON.stringify(that.getTouchPoints(evt)));
-
-                    }
-
-                }
+                that.processSwipe(el, evt, settings);
 
             }
-
-            if (el.ha(settings.swipeUp)) {
-
-                if (!el.ha(settings.swipeUpEnd) &&
-                            el.ha(settings.swipeUpInit)) {
-
-                    console.log("should swipe up");
-
-                    var start = JSON.parse(el.getAttribute(settings.swipeUpInit)),
-                                end = that.getTouchPoints(evt),
-                                translate = that.calculateTranslation(start, end);
-
-                    if (translate.translationY < 0 &&
-                        Math.abs(translate.translationY) > settings.swipeUpThreshold) {
-
-                        that.swipeUpCallback(evt, null, translate);
-                        el.setAttribute(settings.swipeUpInit, JSON.stringify(that.getTouchPoints(evt)));
-                        el.setAttribute(settings.swipeDownInit, JSON.stringify(that.getTouchPoints(evt)));
-
-                    }
-
-                }
-
-            }
-
-            if (el.ha(settings.swipeDown)) {
-
-                if (!el.ha(settings.swipeDownEnd) &&
-                            el.ha(settings.swipeDownInit)) {
-
-                    console.log("should swipe down");
-
-                    var start = JSON.parse(el.getAttribute(settings.swipeDownInit)),
-                                end = that.getTouchPoints(evt),
-                                translate = that.calculateTranslation(start, end);
-
-                    if (translate.translationY > 0 &&
-                        translate.translationY > settings.swipeDownThreshold) {
-
-                        that.swipeDownCallback(evt, null, translate);
-                        el.setAttribute(settings.swipeUpInit, JSON.stringify(that.getTouchPoints(evt)));
-                        el.setAttribute(settings.swipeDownInit, JSON.stringify(that.getTouchPoints(evt)));
-
-                    }
-
-                }
-
-            }
-
-            /*
-            if (el.ha("data-rotate") && Math.abs(0.0019) > this.settings.rotateThreshold) {
-
-            console.log("do touch rotate");
-            //el.style.transform = m.rotate(e.rotation * 180 / Math.PI); // Apply Rotation
-
-            //this.rotateCallback(e, m);
-            }
-
-            if (el.ha("data-scale") && Math.abs(e.scale) > this.settings.scaleThreshold) {
-
-            console.log("do touch scale");
-
-            //el.style.transform = m.scale(e.scale); // Apply Rotation
-            //this.scaleCallback(e, m);
-            }
-            */
 
         },
 
@@ -933,7 +851,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
         //move
         //may add a threshold value, but for now just assume it should always fire.
-        move : function (callback) {
+        move: function (callback) {
 
             this.setupIndicator(callback, "moveCallback", 0,
                                     "", "moveIndicator");
@@ -941,7 +859,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
         },
 
-        horizontalMove : function (callback) {
+        horizontalMove: function (callback) {
 
             this.setupIndicator(callback, "moveHorizontalCallback", 0,
                                     "", "horizontalIndicator");
@@ -949,7 +867,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
         },
 
-        verticalMove : function (callback) {
+        verticalMove: function (callback) {
 
             this.setupIndicator(callback, "moveVerticalCallback", 0,
                                     "", "verticalIndicator");
@@ -958,7 +876,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         },
 
         //rotate
-        rotate : function (callback) {
+        rotate: function (callback) {
 
             this.setupIndicator(callback, "rotateCallback", 0,
                                     "", "rotateIndicator");
@@ -967,26 +885,26 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         },
 
         //scale
-        scale : function (callback) {
+        scale: function (callback) {
 
             this.setupIndicator(callback, "scaleCallback", 0,
                                     "", "scaleIndicator");
             return this;
 
         },
-    
+
         //Tap
-        tap : function (callback) {
+        tap: function (callback) {
 
             var that = this;
 
             if (!callback) {
-                callback = foo;
+                callback = $.noop;
             }
 
             if (that.hasmsGesture) {
 
-                [ ].forEach.call(this.node, function (el) {
+                [].forEach.call(this.node, function (el) {
                     el.addEventListener("MSGestureTap", callback, false);
                 });
 
@@ -1003,7 +921,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
         //Double Tap Members
 
-        dblTap : function (callback) {
+        dblTap: function (callback) {
 
             var that = this,
                 settings = this.settings,
@@ -1021,7 +939,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
         },
 
         //Tap Hold Members
-        tapHold : function (callback, endcallback, cancelcallback) {
+        tapHold: function (callback, endcallback, cancelcallback) {
 
             var that = this;
 
@@ -1035,7 +953,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
                 that.tapHoldEndCallback = endcallback;
                 that.tapHoldCancelCallback = cancelcallback;
 
-                [ ].forEach.call(this.node, function (el) {
+                [].forEach.call(this.node, function (el) {
 
                     that.preventTapHoldContext(el);
 
@@ -1047,7 +965,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
             } else {
 
-                [ ].forEach.call(this.node, function (el) {
+                [].forEach.call(this.node, function (el) {
 
                     that.preventTapHoldContext(el);
 
@@ -1068,15 +986,15 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             return this;
         },
 
-        preventTapHoldContext: function(elm){
-          
-          elm.addEventListener("contextmenu", function (e) {
-              e.preventDefault();    // Disables system menu
+        preventTapHoldContext: function (elm) {
+
+            elm.addEventListener("contextmenu", function (e) {
+                e.preventDefault();    // Disables system menu
             }, false);
-  
+
         },
 
-        setupTapHold : function (el, evt) {
+        setupTapHold: function (el, evt) {
 
             var that = this,
                 tht;
@@ -1096,17 +1014,17 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
         },
 
-        tapHoldBeginCallback : foo,
-        tapHoldEndCallback : foo,
-        tapHoldCancelCallback : foo,
+        tapHoldBeginCallback: $.noop,
+        tapHoldEndCallback: $.noop,
+        tapHoldCancelCallback: $.noop,
 
-        tapHoldCallback : function (evt) {
+        tapHoldCallback: function (evt) {
 
             var that = this;
 
             evt.preventDefault();
 
-           // console.info("evt.detail - " + evt.detail);
+            // console.info("evt.detail - " + evt.detail);
 
             if (evt.detail & evt.MSGESTURE_FLAG_BEGIN) {
 
@@ -1133,7 +1051,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
             logging: false,
             swipeRightThreshold: 25,
             swipeLeftThreshold: -25,
-            swipeUpThreshold: 25,
+            swipeUpThreshold: -25,
             swipeDownThreshold: 25,
             moveThreshold: 0,
             rotateThreshold: 0,
@@ -1203,4 +1121,212 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
     return (window.deeptissue = deeptissue);
 
-} (window));
+}(window, $));
+
+(function (window, deeptissue, undefined) {
+
+    "use strict";
+
+    //may add a threshold value, but for now just assume it should always fire.
+    deeptissue.fn.move = function (callback) {
+
+        this.setupIndicator(callback, "moveCallback", 0,
+                                "", "moveIndicator");
+        return this;
+
+    };
+
+    deeptissue.fn.horizontalMove = function (callback) {
+
+        this.setupIndicator(callback, "moveHorizontalCallback", 0,
+                                "", "horizontalIndicator");
+        return this;
+
+    };
+
+    deeptissue.fn.verticalMove = function (callback) {
+
+        this.setupIndicator(callback, "moveVerticalCallback", 0,
+                                "", "verticalIndicator");
+        return this;
+
+    };
+
+} (window, deeptissue));
+
+
+(function (window, deeptissue, undefined) {
+
+    "use strict";
+
+    //Tap
+    deeptissue.fn.tap = function (callback) {
+
+        var that = this;
+
+        if (!callback) {
+            callback = function () { };
+        }
+
+        if (that.hasmsGesture) {
+
+            [ ].forEach.call(this.node, function (el) {
+                el.addEventListener("MSGestureTap", callback, false);
+            });
+
+        } else {
+
+            this.setupIndicator(callback, "tapCallback", 0,
+                                "", "tapIndicator");
+
+        }
+
+        return this;
+
+    };
+
+    //Double Tap Members
+
+    deeptissue.fn.dblTap = function (callback) {
+
+        var that = this,
+            settings = this.settings,
+            tl = document.querySelector(".touch-log");
+
+        if (callback) {
+            settings.doubleTapCallback = callback;
+        }
+
+        this.setupIndicator(callback, "doubleTapCallback", 0,
+                            "", "doubleTapIndicator");
+
+        return this;
+
+    };
+
+    //Tap Hold Members
+    deeptissue.fn.tapHold = function (callback, endcallback, cancelcallback) {
+
+        var that = this;
+
+        if (callback) {
+            that.tapHoldBeginCallback = callback;
+        }
+
+        if (this.hasmsGesture) {
+
+            [ ].forEach.call(this.node, function (el) {
+                el.addEventListener("MSGestureHold", function (evt) {
+                    that.tapHoldCallback.call(that, evt);
+                }, false);
+            });
+
+        } else {
+
+            [ ].forEach.call(this.node, function (el) {
+
+                el.addEventListener(that.touchStart, function (evt) {
+                    that.setupTapHold(el, evt);
+                });
+
+                if (that.hasMouse) {
+                    el.addEventListener("mousedown", function (evt) {
+                        that.setupTapHold(el, evt);
+                    });
+                }
+
+            }, false);
+
+        }
+
+        return this;
+    };
+
+    deeptissue.fn.setupTapHold = function (el, evt) {
+
+        var that = this,
+            tht;
+
+        tht = setTimeout(function () {
+            that.tapHoldBeginCallback.call(that, evt);
+            clearTimeout(tht);
+        }, 500);
+
+        el.addEventListener(that.touchEnd, function (evt) {
+            clearTimeout(tht);
+        }, false);
+
+        el.addEventListener(that.touchCancel, function (evt) {
+            clearTimeout(tht);
+        }, false);
+
+    };
+
+    deeptissue.fn.tapHoldBeginCallback = function () { };
+    deeptissue.fn.tapHoldEndCallback = function () { };
+    deeptissue.fn.tapHoldCancelCallback = function () { };
+
+    deeptissue.fn.tapHoldCallback = function (evt) {
+
+        console.info("evt.detail - " + evt.detail);
+
+        if (evt.detail & evt.MSGESTURE_FLAG_BEGIN) {
+
+            // Begin signals the start of a gesture. For the Hold gesture, this means the user has been holding long enough in place that the gesture will become a complete press & hold if the finger is lifted.
+            this.tapHoldBeginCallback.call(this, evt);
+        }
+
+        if (evt.detail & evt.MSGESTURE_FLAG_END) {
+
+            // End signals the end of the gesture.
+            this.tapHoldEndCallback.call(this, evt);
+        }
+
+        if (evt.detail & evt.MSGESTURE_FLAG_CANCEL) {
+
+            // Cancel signals the user started the gesture but cancelled it. For hold, this occurs when the user drags away before lifting. This flag is sent together with the End flag, signaling the gesture recognition is complete.
+            this.tapHoldCancelCallback.call(this, evt);
+        }
+
+    };
+
+
+} (window, deeptissue));
+
+
+
+(function (window, deeptissue, undefined) {
+
+    "use strict";
+
+    deeptissue.fn.rotate = function (callback) {
+
+        this.setupIndicator(callback, "rotateCallback", 0,
+                                "", "rotateIndicator");
+        return this;
+
+    };
+
+
+} (window, deeptissue));
+
+
+
+
+(function (window, deeptissue, undefined) {
+
+    "use strict";
+
+    deeptissue.fn.scale = function (callback) {
+
+        this.setupIndicator(callback, "scaleCallback", 0,
+                                "", "scaleIndicator");
+        return this;
+
+    };
+
+
+} (window, deeptissue));
+
+
+
