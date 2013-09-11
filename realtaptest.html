@@ -64,7 +64,7 @@
             
             dt.tap(function (evt) {
             
-                tl.innerText = "Single Tap\n" + tl.innerText;
+                tl.textContent = "Single Tap" + tl.textContent;
             
                 console.log(evt.type);
                 console.log(evt.screenX);
@@ -74,21 +74,21 @@
             
             dbt.dblTap(function (evt){ 
             
-                tl.innerText = "Double Tap\n" + tl.innerText;
+                tl.textContent = "Double Tap" + tl.textContent;
             
             });
             
             th.tapHold(function (evt) {
             
-                tl.innerText = "Tap Hold\n" + tl.innerText;
+                tl.textContent = "Tap Hold" + tl.textContent;
             
             }, function (evt) {
             
-                tl.innerText = "Tap Hold End\n" + tl.innerText;
+                tl.textContent = "Tap Hold End" + tl.textContent;
             
             }, function (evt) {
             
-                tl.innerText = "Tap Hold Cancel\n" + tl.innerText;
+                tl.textContent = "Tap Hold Cancel" + tl.textContent;
             
             });
             

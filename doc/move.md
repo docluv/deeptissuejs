@@ -31,10 +31,10 @@ user moves the target element.
 
             dt.move(function (evt, m) {
             
-                el.innerText = "move " +
+                el.textContent = "move " +
                                 evt.translationX + "px " +
                                 evt.translationY + "px\n" +
-                                el.innerText;
+                                el.textContent;
             
             });
 

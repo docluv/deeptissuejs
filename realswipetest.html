@@ -67,7 +67,7 @@
             
                 x = (evt.translationX !== undefined) ? evt.translationX : translate.translationX;
             
-                el.innerText = "swipe right " + x + "px " + el.innerText;
+                el.textContent = "swipe right " + x + "px " + el.textContent;
             
                 if (m !== null) {
                     el.style.transform = m.translate(75, 0, 0); // Apply Translation;    
@@ -82,7 +82,7 @@
             
                           x = (evt.translationX !== undefined) ? evt.translationX : translate.translationX;
             
-                el.innerText = "swipe Left " + x + "px " + el.innerText;
+                el.textContent = "swipe Left " + x + "px " + el.textContent;
             
                 if (m !== null) {
                     el.style.transform = m.translate(-75, 0, 0); // Apply Translation;    
@@ -98,8 +98,8 @@
             
                 y = (evt.translationY !== undefined) ? evt.translationY : translate.translationY;
             
-                el.innerText = "swipe down " +
-                                (evt.translationY || translate.translationY) + "px " + el.innerText;
+                el.textContent = "swipe down " +
+                                (evt.translationY || translate.translationY) + "px " + el.textContent;
             
                 if (m !== null) {
                     el.style.transform = m.translate(0, evt.translationY, 0); // Apply Translation;    
@@ -114,8 +114,8 @@
             
                 y = (evt.translationY !== undefined) ? evt.translationY : translate.translationY;
             
-                el.innerText = "swipe up " +
-                                (evt.translationY || translate.translationY) + "px " + el.innerText;
+                el.textContent = "swipe up " +
+                                (evt.translationY || translate.translationY) + "px " + el.textContent;
             
                 if (m !== null) {
                     el.style.transform = m.translate(0, evt.translationY, 0); // Apply Translation;    

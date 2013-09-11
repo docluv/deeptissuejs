@@ -31,9 +31,9 @@ user moves the target element.
 
                 rt.rotate(function (evt, m) {
             
-                    tl.innerText = "rotating " +
+                    tl.textContent = "rotating " +
                                     evt.rotation + "\n" +
-                                    tl.innerText;
+                                    tl.textContent;
             
                     evt.target.style.transform = m.rotate(evt.rotation * 180 / Math.PI); // Apply Rotation
             

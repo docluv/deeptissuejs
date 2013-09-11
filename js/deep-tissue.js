@@ -118,7 +118,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
             } catch (ex) {
 
-                console.error("setUpTouchGestures is broken \r\n" + tl.innerText);
+                console.error("setUpTouchGestures is broken \r\n" + tl.textContent);
 
                 return false;
             }
