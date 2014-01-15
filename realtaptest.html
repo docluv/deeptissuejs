@@ -46,19 +46,19 @@
                 <a href="realscaletest.html">SCALE</a>
             </nav>
         </header>
-        <section class="touch-area sgl-tap">Single Tap</section>
-        <section class="touch-area dbl-tap"> Double Tap</section>
-        <section class="touch-area tap-hold">Tap Hold</section>
-        <section class="touch-log">Log Goes Here</section>
+        <div class="touch-area sgl-tap">Single Tap</div>
+        <div class="touch-area dbl-tap"> Double Tap</div>
+        <div class="touch-area tap-hold">Tap Hold</div>
+        <div class="touch-log">Log Goes Here</div>
 
         <script src="js/debug/deeptissue.js" type="text/javascript"></script>
+        <script src="js/debug/deeptissue.tap.js" type="text/javascript"></script>
 
         <script type="text/javascript">
 
             var tl = document.querySelector(".touch-log"),
                 dt = deeptissue(document.querySelectorAll(".sgl-tap")),
-                dbt = deeptissue(document.querySelectorAll(".dbl-tap")),
-                th = deeptissue(document.querySelectorAll((".tap-hold")));
+                dbt = deeptissue(document.querySelectorAll(".dbl-tap"));
 
             dt.tap(function (evt) {
 
@@ -70,31 +70,27 @@
 
             });
 
-            dbt.dblTap(function (evt){ 
-            
-                tl.innerText = "Double Tap\n" + tl.innerText;
-            
+            dbt.dblTap(function (evt) {
+
+                tl.textContent  = "Double Tap\n" + tl.innerText;
+
             });
 
+            var th = deeptissue(document.querySelectorAll((".tap-hold")));
             th.tapHold(function (evt) {
 
-                tl.innerText = "Tap Hold\n" + tl.innerText;
+                evt.preventDefault();
+                evt.stopPropagation();
 
-            }, function (evt) {
-
-                tl.innerText = "Tap Hold End\n" + tl.innerText;
-
-            }, function (evt) {
-
-                tl.innerText = "Tap Hold Cancel\n" + tl.innerText;
+                tl.textContent  = "Tap Hold\n" + tl.innerText;
 
             });
 
 
         </script>
+                <script type="text/javascript">
 
-        <script type="text/javascript">
-
+            
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-83556-6']);
             _gaq.push(['_trackPageview']);
