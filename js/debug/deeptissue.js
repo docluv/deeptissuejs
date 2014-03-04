@@ -6,8 +6,13 @@
 
     HTMLElement.prototype.ha = HTMLElement.prototype.hasAttribute;
 
-    var querySelector = document.querySelector,
+    function qs(selector){
+        return document.querySelector(selector);
+    } 
 
+    function qsa(selector){
+        return document.querySelectorAll(selector);
+    } 
 
     deeptissue = function (node, customSettings) {
 
@@ -32,7 +37,7 @@
 
             this["settings"] = $.extend({}, this["settings"], customSettings);
 
-            $.buildVendorNames();
+            this.support = $.buildVendorNames();
 
             this.touchType = window.navigator.msPointerEnabled ? "pointer" :
                                 "ontouchstart" in window ? "touch" : "mouse";
@@ -104,7 +109,7 @@
 
             } catch (ex) {
 
-                console.error("setUpTouchGestures is broken \r\n" + tl.innerText);
+                console.error("setUpTouchGestures is broken \r\n" + tl.textContent);
 
                 return false;
             }
@@ -911,7 +916,7 @@
 
             var that = this,
                 settings = this.settings,
-                tl = document.querySelector(".touch-log");
+                tl = qs(".touch-log");
 
             if (callback) {
                 settings.doubleTapCallback = callback;

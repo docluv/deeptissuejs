@@ -321,7 +321,7 @@ QUnit = {
 
 	test: function( testName, expected, callback, async ) {
 		var test,
-			name = "<span class='test-name'>" + escapeInnerText( testName ) + "</span>";
+			name = "<span class='test-name'>" + escapetextContent( testName ) + "</span>";
 
 		if ( arguments.length === 2 ) {
 			callback = expected;
@@ -428,14 +428,14 @@ QUnit.assert = {
 				message: msg
 			};
 
-		msg = escapeInnerText( msg || (result ? "okay" : "failed" ) );
+		msg = escapetextContent( msg || (result ? "okay" : "failed" ) );
 		msg = "<span class='test-message'>" + msg + "</span>";
 
 		if ( !result ) {
 			source = sourceFromStacktrace( 2 );
 			if ( source ) {
 				details.source = source;
-				msg += "<table><tr class='test-source'><th>Source: </th><td><pre>" + escapeInnerText( source ) + "</pre></td></tr></table>";
+				msg += "<table><tr class='test-source'><th>Source: </th><td><pre>" + escapetextContent( source ) + "</pre></td></tr></table>";
 			}
 		}
 		runLoggingCallbacks( "log", QUnit, details );
@@ -689,7 +689,7 @@ extend( QUnit, {
 
 		if ( qunit ) {
 			qunit.innerHTML =
-				"<h1 id='qunit-header'>" + escapeInnerText( document.title ) + "</h1>" +
+				"<h1 id='qunit-header'>" + escapetextContent( document.title ) + "</h1>" +
 				"<h2 id='qunit-banner'></h2>" +
 				"<div id='qunit-testrunner-toolbar'></div>" +
 				"<h2 id='qunit-userAgent'></h2>" +
@@ -794,13 +794,13 @@ extend( QUnit, {
 				expected: expected
 			};
 
-		message = escapeInnerText( message ) || ( result ? "okay" : "failed" );
+		message = escapetextContent( message ) || ( result ? "okay" : "failed" );
 		message = "<span class='test-message'>" + message + "</span>";
 		output = message;
 
 		if ( !result ) {
-			expected = escapeInnerText( QUnit.jsDump.parse(expected) );
-			actual = escapeInnerText( QUnit.jsDump.parse(actual) );
+			expected = escapetextContent( QUnit.jsDump.parse(expected) );
+			actual = escapetextContent( QUnit.jsDump.parse(actual) );
 			output += "<table><tr class='test-expected'><th>Expected: </th><td><pre>" + expected + "</pre></td></tr>";
 
 			if ( actual != expected ) {
@@ -812,7 +812,7 @@ extend( QUnit, {
 
 			if ( source ) {
 				details.source = source;
-				output += "<tr class='test-source'><th>Source: </th><td><pre>" + escapeInnerText( source ) + "</pre></td></tr>";
+				output += "<tr class='test-source'><th>Source: </th><td><pre>" + escapetextContent( source ) + "</pre></td></tr>";
 			}
 
 			output += "</table>";
@@ -839,19 +839,19 @@ extend( QUnit, {
 				message: message
 			};
 
-		message = escapeInnerText( message ) || "error";
+		message = escapetextContent( message ) || "error";
 		message = "<span class='test-message'>" + message + "</span>";
 		output = message;
 
 		output += "<table>";
 
 		if ( actual ) {
-			output += "<tr class='test-actual'><th>Result: </th><td><pre>" + escapeInnerText( actual ) + "</pre></td></tr>";
+			output += "<tr class='test-actual'><th>Result: </th><td><pre>" + escapetextContent( actual ) + "</pre></td></tr>";
 		}
 
 		if ( source ) {
 			details.source = source;
-			output += "<tr class='test-source'><th>Source: </th><td><pre>" + escapeInnerText( source ) + "</pre></td></tr>";
+			output += "<tr class='test-source'><th>Source: </th><td><pre>" + escapetextContent( source ) + "</pre></td></tr>";
 		}
 
 		output += "</table>";
@@ -1242,7 +1242,7 @@ function sourceFromStacktrace( offset ) {
 	}
 }
 
-function escapeInnerText( s ) {
+function escapetextContent( s ) {
 	if ( !s ) {
 		return "";
 	}

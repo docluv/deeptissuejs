@@ -1,7 +1,11 @@
 module.exports = function (grunt) {
 
+    require("matchdep").filterDev("grunt-*").forEach(grunt.loadNpmTasks);
+
     // Project configuration.
     grunt.initConfig({
+                pkg: grunt.file.readJSON('package.json'),
+
         lint: {
             all: ['grunt.js', 'js/debug/*.js']
         },
@@ -50,9 +54,7 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.loadNpmTasks('grunt-contrib');
-
     // Default task.
-    grunt.registerTask('default', ['concat', 'uglify']);
+    grunt.registerTask('default', ['uglify', 'concat']);
 
 };

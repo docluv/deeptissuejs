@@ -29,7 +29,7 @@ see this in the demo pages.
 
 dt.tap(function (evt) {
 
-    tl.innerText = "Single Tap\n" + tl.innerText;
+    tl.textContent = "Single Tap\n" + tl.textContent;
 
     console.log(evt.type);
     console.log(evt.screenX);

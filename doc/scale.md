@@ -31,9 +31,9 @@ user moves the target element.
 
                 st.scale(function (evt, m) {
             
-                    tl.innerText = "scaling " +
+                    tl.textContent = "scaling " +
                                     evt.scale + "\n" +
-                                    tl.innerText;
+                                    tl.textContent;
             
                     evt.target.style.transform = m.scale(evt.scale); // Apply Scale
             

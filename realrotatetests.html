@@ -49,6 +49,7 @@
         <p>**** Note this currently only works with IE 10 & Mobile Safari</p>
         <section class="touch-area rotate-target center-item"></section>
         <section class="touch-log">Log Goes Here</section>
+        <script src="js/debug/mbp.js" type="text/javascript"></script>
 
         <script src="js/debug/deeptissue.js" type="text/javascript"></script>
         <script src="js/debug/deeptissue.rotate.js" type="text/javascript"></script>
@@ -60,9 +61,9 @@
 
                 rt.rotate(function (evt, m) {
             
-                    tl.innerText = "rotating " +
+                    tl.textContent = "rotating " +
                                     evt.rotation + "\n" +
-                                    tl.innerText;
+                                    tl.textContent;
             
                     evt.target.style.transform = m.rotate(evt.rotation * 180 / Math.PI); // Apply Rotation
             

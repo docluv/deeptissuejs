@@ -20,8 +20,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
     HTMLElement.prototype.ha = HTMLElement.prototype.hasAttribute;
 
-    var querySelector = document.querySelector,
+    function qs(selector){
+        return document.querySelector(selector);
+    } 
 
+    function qsa(selector){
+        return document.querySelectorAll(selector);
+    } 
 
     deeptissue = function (node, customSettings) {
 
@@ -46,7 +51,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
             this["settings"] = $.extend({}, this["settings"], customSettings);
 
-            $.buildVendorNames();
+            this.support = $.buildVendorNames();
 
             this.touchType = window.navigator.msPointerEnabled ? "pointer" :
                                 "ontouchstart" in window ? "touch" : "mouse";
@@ -118,7 +123,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
             } catch (ex) {
 
-                console.error("setUpTouchGestures is broken \r\n" + tl.innerText);
+                console.error("setUpTouchGestures is broken \r\n" + tl.textContent);
 
                 return false;
             }
@@ -925,7 +930,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
             var that = this,
                 settings = this.settings,
-                tl = document.querySelector(".touch-log");
+                tl = qs(".touch-log");
 
             if (callback) {
                 settings.doubleTapCallback = callback;
