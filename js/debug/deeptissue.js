@@ -253,6 +253,7 @@
                 vertical = false;
 
             m = m || {};
+            e.preventDefault();
 
             //if (that.swipeX !== null || that.swipeY !== null) {
             //    horizontal = Math.abs((e.clientX - that.swipeX)) >
