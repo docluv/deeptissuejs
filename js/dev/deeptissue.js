@@ -6,13 +6,9 @@
 
     HTMLElement.prototype.ha = HTMLElement.prototype.hasAttribute;
 
-    function qs(selector){
-        return document.querySelector(selector);
-    } 
+    var querySelector = document.querySelector,
+        pointers = (window.navigator.msPointerEvent || window.navigator.PointerEvent),
 
-    function qsa(selector){
-        return document.querySelectorAll(selector);
-    } 
 
     deeptissue = function (node, customSettings) {
 
@@ -39,7 +35,7 @@
 
             this.support = $.buildVendorNames();
 
-            this.touchType = window.navigator.msPointerEnabled ? "pointer" :
+            this.touchType = pointers ? "pointer" :
                                 "ontouchstart" in window ? "touch" : "mouse";
 
             this.hasMouse = ("ontouchstart" in window && "onmousedown" in window);
@@ -245,7 +241,7 @@
             that.processSwipe(el, e, settings, m);
 
         },
-        
+
         processSwipe: function (el, e, settings, m) {
 
             var that = this,
@@ -253,7 +249,6 @@
                 vertical = false;
 
             m = m || {};
-            e.preventDefault();
 
             //if (that.swipeX !== null || that.swipeY !== null) {
             //    horizontal = Math.abs((e.clientX - that.swipeX)) >
@@ -845,24 +840,21 @@
         //may add a threshold value, but for now just assume it should always fire.
         move: function (callback) {
 
-            this.setupIndicator(callback, "moveCallback", 0,
-                                    "", "moveIndicator");
+            this.setupIndicator(callback, "moveCallback", 0, "", "moveIndicator");
             return this;
 
         },
 
         horizontalMove: function (callback) {
 
-            this.setupIndicator(callback, "moveHorizontalCallback", 0,
-                                    "", "horizontalIndicator");
+            this.setupIndicator(callback, "moveHorizontalCallback", 0, "", "horizontalIndicator");
             return this;
 
         },
 
         verticalMove: function (callback) {
 
-            this.setupIndicator(callback, "moveVerticalCallback", 0,
-                                    "", "verticalIndicator");
+            this.setupIndicator(callback, "moveVerticalCallback", 0, "", "verticalIndicator");
             return this;
 
         },
@@ -870,8 +862,7 @@
         //rotate
         rotate: function (callback) {
 
-            this.setupIndicator(callback, "rotateCallback", 0,
-                                    "", "rotateIndicator");
+            this.setupIndicator(callback, "rotateCallback", 0, "", "rotateIndicator");
             return this;
 
         },
@@ -917,7 +908,7 @@
 
             var that = this,
                 settings = this.settings,
-                tl = qs(".touch-log");
+                tl = document.querySelector(".touch-log");
 
             if (callback) {
                 settings.doubleTapCallback = callback;

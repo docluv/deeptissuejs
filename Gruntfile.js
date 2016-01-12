@@ -17,11 +17,11 @@ module.exports = function (grunt) {
         concat: {
             dist: {
                 src: ['js/debug/license.txt',
-                'js/debug/deeptissue.js',
-                'js/debug/deeptissue.move.js',
-                'js/debug/deeptissue.tap.js',
-                'js/debug/deeptissue.rotate.js',
-                'js/debug/deeptissue.scale.js'
+                'js/dev/deeptissue.js',
+                'js/dev/deeptissue.move.js',
+                'js/dev/deeptissue.tap.js',
+                'js/dev/deeptissue.rotate.js',
+                'js/dev/deeptissue.scale.js'
                 ],
                 dest: 'js/deep-tissue.js',
                 separator: ';'
@@ -42,12 +42,12 @@ module.exports = function (grunt) {
         //    },
 
             dist: {
-                src: ['js/debug/deeptissue.js',
-                'js/debug/deeptissue.move.js',
-                'js/debug/deeptissue.swipejs',
-                'js/debug/deeptissue.tap.js',
-                'js/debug/deeptissue.rotate.js',
-                'js/debug/deeptissue.scale.js'
+                src: ['js/dev/deeptissue.js',
+                'js/dev/deeptissue.move.js',
+                'js/dev/deeptissue.swipejs',
+                'js/dev/deeptissue.tap.js',
+                'js/dev/deeptissue.rotate.js',
+                'js/dev/deeptissue.scale.js'
                 ],
                 dest: 'js/deep-tissue.min.js'
             }

@@ -48,48 +48,47 @@
         </header>
         <section class="touch-area center-item">SWIPE</section>
 
-        <script src="js/debug/deeptissue.js" type="text/javascript"></script>
-        <script src="js/debug/deeptissue.swipe.js" type="text/javascript"></script>
+        <script src="js/debug/mbp.js" type="text/javascript"></script>
+
+        <script src="js/dev/deeptissue.js" type="text/javascript"></script>
 
         <script type="text/javascript">
-
-            var dt = deeptissue(document.querySelectorAll(".touch-area"), 
-                        {
-                            swipeRightThreshold: 35,
-                            swipeLeftThreshold: -35,
-                            swipeUpThreshold: 35,
-                            swipeDownThreshold: 35
-                        });
+            
+            var dt = deeptissue(document.querySelectorAll(".touch-area"),                         {
+                            swipeRightThreshold: 50,
+                            swipeLeftThreshold: -50,
+                            swipeUpThreshold: -50,
+                            swipeDownThreshold: 50
+                        }),
+                el = document.querySelector(".touch-area"),
+                x = 0, y = 0;
             
             dt.swipeRight(function (evt, m, translate) {
             
-                var el = document.querySelector(".touch-area"),
-                          x = (evt.translationX !== undefined) ? evt.translationX : translate.translationX;
+                x = (evt.translationX !== undefined) ? evt.translationX : translate.translationX;
             
                 el.textContent = "swipe right " + x + "px " + el.textContent;
             
                 if (m !== null) {
-                    el.style.transform = m.translate(evt.translationX, 0, 0); // Apply Translation;    
+                    el.style.transform = m.translate(75, 0, 0); // Apply Translation;    
                 } else if (translate) {
                     el.style[dt.support.transform] =
-                                    "translate3D(" + translate.translationX + "px, 0, 0)";
+                                    "translate3D(" + 75 + "px, 0, 0)";
                 }
-            
             
             })
             
             .swipeLeft(function (evt, m, translate) {
             
-                var el = document.querySelector(".touch-area"),
                           x = (evt.translationX !== undefined) ? evt.translationX : translate.translationX;
             
                 el.textContent = "swipe Left " + x + "px " + el.textContent;
             
                 if (m !== null) {
-                    el.style.transform = m.translate(evt.translationX, 0, 0); // Apply Translation;    
+                    el.style.transform = m.translate(-75, 0, 0); // Apply Translation;    
                 } else if (translate) {
                     el.style[dt.support.transform] =
-                                    "translate3D(" + translate.translationX + "px, 0, 0)";
+                                    "translate3D(" + -75 + "px, 0, 0)";
                 }
             
             
@@ -97,8 +96,7 @@
             
             .swipeDown(function (evt, m, translate) {
             
-                var el = document.querySelector(".touch-area"),
-                          y = (evt.translationY !== undefined) ? evt.translationY : translate.translationY;
+                y = (evt.translationY !== undefined) ? evt.translationY : translate.translationY;
             
                 el.textContent = "swipe down " +
                                 (evt.translationY || translate.translationY) + "px " + el.textContent;
@@ -114,16 +112,10 @@
             
             .swipeUp(function (evt, m, translate) {
             
-                var el = document.querySelector(".touch-area"),
-                          y = (evt.translationY !== undefined) ? evt.translationY : translate.translationY;
+                y = (evt.translationY !== undefined) ? evt.translationY : translate.translationY;
             
-<<<<<<< HEAD
-                el.innerText = "swipe down " +
-                                (evt.translationY || translate.translationY) + "px " + el.innerText;
-=======
                 el.textContent = "swipe up " +
                                 (evt.translationY || translate.translationY) + "px " + el.textContent;
->>>>>>> 16b3fc777e870886d70340e0f5df9e3144616223
             
                 if (m !== null) {
                     el.style.transform = m.translate(0, evt.translationY, 0); // Apply Translation;    
@@ -137,12 +129,6 @@
         </script>
         <script type="text/javascript">
 
-
-
-
-            
-            
-            
             
             var _gaq = _gaq || [];
             _gaq.push(['_setAccount', 'UA-83556-6']);

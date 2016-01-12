@@ -915,8 +915,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
             } else {
 
-                this.setupIndicator(callback, "tapCallback", 0,
-                                    "", "tapIndicator");
+                this.setupIndicator(callback, "tapCallback", 0, "", "tapIndicator");
 
             }
 

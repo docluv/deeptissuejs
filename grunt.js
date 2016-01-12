@@ -13,14 +13,14 @@ module.exports = function(grunt) {
     concat: {
         dist: {
           src: ['js/debug/license.txt',
-                'js/debug/deeptissue.js',
-                'js/debug/deeptissue.move.js',
-                'js/debug/deeptissue.swipejs',
-                'js/debug/deeptissue.tap.js',
-                'js/debug/deeptissue.rotate.js',
-                'js/debug/deeptissue.scale.js',
-                'js/debug/deeptissue.swipe.js'
-                //,'js/debug/deeptissue-swipetoselect.js'
+                'js/dev/deeptissue.js',
+                'js/dev/deeptissue.move.js',
+                'js/dev/deeptissue.swipejs',
+                'js/dev/deeptissue.tap.js',
+                'js/dev/deeptissue.rotate.js',
+                'js/dev/deeptissue.scale.js',
+                'js/dev/deeptissue.swipe.js'
+                //,'js/dev/deeptissue-swipetoselect.js'
                 ],
           dest: 'js/deep-tissue.js',
           separator: ';'
@@ -36,14 +36,14 @@ module.exports = function(grunt) {
       },
       min: {
         dist: {
-          src: ['js/debug/deeptissue.js',
-                'js/debug/deeptissue.move.js',
-                'js/debug/deeptissue.swipejs',
-                'js/debug/deeptissue.tap.js',
-                'js/debug/deeptissue.rotate.js',
-                'js/debug/deeptissue.scale.js',
-                'js/debug/deeptissue.swipe.js'
-                //,'js/debug/deeptissue-swipetoselect.js'
+          src: ['js/dev/deeptissue.js',
+                'js/dev/deeptissue.move.js',
+                'js/dev/deeptissue.swipejs',
+                'js/dev/deeptissue.tap.js',
+                'js/dev/deeptissue.rotate.js',
+                'js/dev/deeptissue.scale.js',
+                'js/dev/deeptissue.swipe.js'
+                //,'js/dev/deeptissue-swipetoselect.js'
                 ],
           dest: 'js/deep-tissue.min.js'
         }
