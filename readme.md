@@ -1,4 +1,14 @@
-# [Deeptissue.js](http://deeptissuejs.com/)
+# [Deeptissue.js](https://deeptissuejs.com/)
+
+**** NOTE ****
+
+Apple seems to have finally caught up to the rest of the web on touch events, at least on iOS. As of iOS 13 Safari now seems to have support for Pointer Events.
+
+As soon as I have time to test and verify this I will update.
+
+So hopefully, like many other library floating around the web I can deprecate this library in favor os native functionality. :)
+
+****
 
 Deeptissue.js is a helper library to abstract away the differences between the MSPointer 
 and WebKit Touch APIs. There are many JavaScript libraries publicly available that support 
